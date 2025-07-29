@@ -20,8 +20,33 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Custom CSS (for overrides or specific components) -->
-    <link rel="stylesheet" href="css/style.css">
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                font-family: 'Inter', sans-serif;
+            }
+        }
+        @layer utilities {
+            /* Custom colors defined here */
+            .bg-mint-cream { background-color: #FCFFFD; }
+            .text-mint-cream { color: #FCFFFD; }
+            .bg-mint-cream-dark { background-color: #F0F5F2; } /* Slightly darker for contrast */
+
+            .bg-oxford-blue { background-color: #011936; }
+            .text-oxford-blue { color: #011936; }
+            .border-oxford-blue { border-color: #011936; }
+            .bg-oxford-blue-light { background-color: #1a3350; } /* Lighter for headers/secondary buttons */
+            .hover\:bg-oxford-blue-dark:hover { background-color: #000F22; } /* Darker for hover */
+            .text-oxford-blue-dark { color: #000F22; } /* Darker for readability */
+            .text-oxford-blue-medium { color: #011936; } /* Medium shade for general text */
+
+            .bg-hot-pink { background-color: #ED254E; }
+            .text-hot-pink { color: #ED254E; }
+            .hover\:bg-hot-pink-dark:hover { background-color: #C41F41; } /* Darker for hover */
+            .focus\:ring-hot-pink:focus { --tw-ring-color: #ED254E; }
+            .focus\:border-hot-pink:focus { border-color: #ED254E; }
+        }
+    </style>
 
     <style>
         /* Basic styles for chart containers to ensure responsiveness */
@@ -40,8 +65,8 @@
         }
         /* Styling for tooltips (Chart.js custom tooltips) */
         .tooltip {
-            background-color: #334155; /* slate-700 */
-            color: white;
+            background-color: #011936; /* Oxford Blue */
+            color: #FCFFFD; /* Mint Cream */
             border-radius: 0.375rem; /* rounded-md */
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             padding: 0.5rem 0.75rem;
@@ -55,7 +80,7 @@
             font-weight: 700;
             padding-bottom: 0.25rem;
             margin-bottom: 0.25rem;
-            border-bottom: 1px solid #475569; /* slate-600 */
+            border-bottom: 1px solid #1a3350; /* Lighter Oxford Blue */
         }
         .tooltip-body {
             font-size: 0.875rem; /* text-sm */
@@ -112,7 +137,7 @@
         }
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #38bdf8; /* sky-400 */
+            border-top: 4px solid #ED254E; /* Hot Pink */
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -124,7 +149,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans">
+<body class="bg-mint-cream text-oxford-blue font-sans">
 
     <div id="loading-overlay">
         <div class="spinner"></div>
@@ -133,25 +158,25 @@
     <div class="container mx-auto p-4 md:p-8">
         <!-- Header Section -->
         <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-slate-900">Soccer Scouting Analytics Dashboard</h1>
-            <p class="mt-2 text-lg text-slate-600">Analyze player performance with interactive charts and AI insights.</p>
+            <h1 class="text-4xl font-bold text-oxford-blue">Soccer Scout Analytics Dashboard</h1>
+            <p class="mt-2 text-lg text-oxford-blue-medium">Analyze player performance with interactive charts and AI insights.</p>
         </header>
 
         <main id="dashboard-main-content">
             <!-- Introduction & How-to Section -->
-            <section id="intro-how-to" class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mb-8">
-                <h2 class="text-2xl font-bold text-slate-900 mb-4">Welcome to the Soccer Scouting Analytics Dashboard!</h2>
-                <p class="text-slate-700 mb-4">
+            <section id="intro-how-to" class="max-w-4xl mx-auto bg-mint-cream p-6 rounded-xl shadow-md mb-8">
+                <h2 class="text-2xl font-bold text-oxford-blue mb-4">Welcome to the Soccer Scout Analytics Dashboard!</h2>
+                <p class="text-oxford-blue-medium mb-4">
                     This interactive dashboard is designed to help you analyze soccer player performance data efficiently.
-                    By uploading your CSV or Excel files, you can gain deep insights into individual players  and compare them against peers.
+                    By uploading your CSV or Excel files, you can gain deep insights into individual players, compare them against peers, and even generate AI-powered scouting reports.
                 </p>
-                <div class="collapsible-header bg-slate-100 hover:bg-slate-200 p-3 rounded-md flex justify-between items-center text-lg font-semibold" data-target="#how-to-use-content">
+                <div class="collapsible-header bg-oxford-blue-light hover:bg-oxford-blue-dark p-3 rounded-md flex justify-between items-center text-lg font-semibold text-mint-cream" data-target="#how-to-use-content">
                     <span>Detailed Instructions: Getting Started</span>
                     <span class="arrow">▼</span>
                 </div>
-                <div id="how-to-use-content" class="collapsible-content p-4 bg-slate-50 rounded-b-md">
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">How to Use This Dashboard:</h3>
-                    <ol class="list-decimal list-inside text-slate-700 space-y-3">
+                <div id="how-to-use-content" class="collapsible-content p-4 bg-mint-cream-dark rounded-b-md">
+                    <h3 class="text-xl font-bold text-oxford-blue mb-3">How to Use This Dashboard:</h3>
+                    <ol class="list-decimal list-inside text-oxford-blue-medium space-y-3">
                         <li>
                             <strong>Upload Your Data:</strong>
                             <p class="ml-4">Begin by uploading your player performance data. The dashboard supports both <code>.csv</code> and <code>.xlsx</code> (Excel) file formats. You can select multiple files if your data is spread across different documents. The system will process and combine them automatically.</p>
@@ -177,82 +202,86 @@
                             <p class="ml-4">The "Detailed Metric Breakdown" section provides a comprehensive table of all available metrics, showing the player's value, the peer group average, and their percentile rank. You can also adjust conditional formatting thresholds to quickly identify strengths and areas for development.</p>
                         </li>
                         <li>
+                            <strong>Generate AI-Powered Insights:</strong>
+                            <p class="ml-4">Get an instant narrative scouting report powered by AI. This feature summarizes a player's performance, highlighting key strengths and weaknesses based on the analyzed data.</p>
+                        </li>
+                        <li>
                             <strong>Export Your Findings:</strong>
                             <p class="ml-4">Easily export individual charts as PNG images, detailed metric tables as CSV files, or download a complete PDF report of the entire dashboard for offline review or sharing.</p>
                         </li>
                     </ol>
-                    <p class="text-slate-700 mt-4">We hope this dashboard empowers your scouting and analysis process!</p>
+                    <p class="text-oxford-blue-medium mt-4">We hope this dashboard empowers your scouting and analysis process!</p>
                 </div>
             </section>
 
             <!-- File Upload and Player Selection Section -->
-            <section id="controls" class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mb-8">
-                <h2 class="text-2xl font-bold text-slate-900 mb-4">Data Input & Player Selection</h2>
+            <section id="controls" class="max-w-4xl mx-auto bg-mint-cream p-6 rounded-xl shadow-md mb-8">
+                <h2 class="text-2xl font-bold text-oxford-blue mb-4">Data Input & Player Selection</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                     <div>
-                        <label for="file-upload" class="block text-sm font-medium text-slate-700 mb-2">1. Upload Player Data (CSV or Excel)</label>
-                        <input id="file-upload" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" multiple class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 transition-colors duration-200">
-                        <p id="file-status" class="text-xs text-slate-500 mt-2">No file selected.</p>
+                        <label for="file-upload" class="block text-sm font-medium text-oxford-blue-medium mb-2">1. Upload Player Data (CSV or Excel)</label>
+                        <input id="file-upload" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" multiple class="block w-full text-sm text-oxford-blue-medium file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-hot-pink file:text-mint-cream hover:file:bg-hot-pink-dark transition-colors duration-200">
+                        <p id="file-status" class="text-xs text-oxford-blue-medium mt-2">No file selected.</p>
                     </div>
                     <div>
-                        <label for="player-select" class="block text-sm font-medium text-slate-700 mb-2">2. Select a Player</label>
-                        <select id="player-select" disabled class="block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 disabled:bg-slate-100 disabled:cursor-not-allowed transition-all duration-200">
+                        <label for="player-select" class="block text-sm font-medium text-oxford-blue-medium mb-2">2. Select a Player</label>
+                        <select id="player-select" disabled class="block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink disabled:bg-mint-cream-dark disabled:cursor-not-allowed transition-all duration-200">
                             <option value="">Upload a file first</option>
                         </select>
                     </div>
                 </div>
                 
                 <!-- Peer Group Filters -->
-                <div class="mt-6 p-4 bg-slate-50 rounded-lg">
-                    <h4 class="text-md font-semibold text-slate-800 mb-3">Peer Group Filters</h4>
+                <div class="mt-6 p-4 bg-mint-cream-dark rounded-lg">
+                    <h4 class="text-md font-semibold text-oxford-blue mb-3">Peer Group Filters</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label for="min-age-filter" class="block text-sm font-medium text-slate-700">Min Age</label>
-                            <input type="number" id="min-age-filter" min="15" max="45" value="15" class="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                            <label for="min-age-filter" class="block text-sm font-medium text-oxford-blue-medium">Min Age</label>
+                            <input type="number" id="min-age-filter" min="15" max="45" value="15" class="mt-1 block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink">
                         </div>
                         <div>
-                            <label for="max-age-filter" class="block text-sm font-medium text-slate-700">Max Age</label>
-                            <input type="number" id="max-age-filter" min="15" max="45" value="45" class="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                            <label for="max-age-filter" class="block text-sm font-medium text-oxford-blue-medium">Max Age</label>
+                            <input type="number" id="max-age-filter" min="15" max="45" value="45" class="mt-1 block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink">
                         </div>
                         <div>
-                            <label for="min-minutes-filter" class="block text-sm font-medium text-slate-700">Min Minutes Played</label>
-                            <input type="number" id="min-minutes-filter" min="0" value="0" class="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                            <label for="min-minutes-filter" class="block text-sm font-medium text-oxford-blue-medium">Min Minutes Played</label>
+                            <input type="number" id="min-minutes-filter" min="0" value="0" class="mt-1 block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink">
                         </div>
                     </div>
-                    <button id="apply-filters-btn" class="mt-4 bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200">Apply Filters</button>
+                    <button id="apply-filters-btn" class="mt-4 bg-hot-pink hover:bg-hot-pink-dark text-mint-cream font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200">Apply Filters</button>
                 </div>
             </section>
 
             <!-- Main Dashboard Content Area (initially hidden) -->
             <div id="dashboard-content" class="hidden">
                 <!-- Player Profile Summary -->
-                <section id="player-profile-section" class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mb-8">
-                    <div class="collapsible-header bg-slate-100 hover:bg-slate-200 p-3 rounded-md flex justify-between items-center text-lg font-semibold" data-target="#player-profile-content">
+                <section id="player-profile-section" class="max-w-4xl mx-auto bg-mint-cream p-6 rounded-xl shadow-md mb-8">
+                    <div class="collapsible-header bg-oxford-blue-light hover:bg-oxford-blue-dark p-3 rounded-md flex justify-between items-center text-lg font-semibold text-mint-cream" data-target="#player-profile-content">
                         <span>Player Profile: <span id="profile-name">[Player Name]</span></span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div id="player-profile-content" class="collapsible-content p-4 bg-slate-50 rounded-b-md">
+                    <div id="player-profile-content" class="collapsible-content p-4 bg-mint-cream-dark rounded-b-md">
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                            <div><p class="text-sm text-slate-500">Position</p><p class="text-xl font-semibold" id="profile-position">-</p></div>
-                            <div><p class="text-sm text-slate-500">Team</p><p class="text-xl font-semibold" id="profile-team">-</p></div>
-                            <div><p class="text-sm text-slate-500">Nationality</p><p class="text-xl font-semibold" id="profile-nationality">-</p></div>
-                            <div><p class="text-sm text-slate-500">Age</p><p class="text-xl font-semibold" id="profile-age">-</p></div>
+                            <div><p class="text-sm text-oxford-blue-medium">Position</p><p class="text-xl font-semibold" id="profile-position">-</p></div>
+                            <div><p class="text-sm text-oxford-blue-medium">Team</p><p class="text-xl font-semibold" id="profile-team">-</p></div>
+                            <div><p class="text-sm text-oxford-blue-medium">Nationality</p><p class="text-xl font-semibold" id="profile-nationality">-</p></div>
+                            <div><p class="text-sm text-oxford-blue-medium">Age</p><p class="text-xl font-semibold" id="profile-age">-</p></div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Chart Customization Section -->
-                <section id="customize-charts-section" class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mb-8">
-                    <div class="collapsible-header bg-slate-100 hover:bg-slate-200 p-3 rounded-md flex justify-between items-center text-lg font-semibold" data-target="#customize-charts-content">
+                <section id="customize-charts-section" class="max-w-4xl mx-auto bg-mint-cream p-6 rounded-xl shadow-md mb-8">
+                    <div class="collapsible-header bg-oxford-blue-light hover:bg-oxford-blue-dark p-3 rounded-md flex justify-between items-center text-lg font-semibold text-mint-cream" data-target="#customize-charts-content">
                         <span>Customize Charts</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div id="customize-charts-content" class="collapsible-content p-4 bg-slate-50 rounded-b-md">
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Select Chart Type & Metrics</h3>
+                    <div id="customize-charts-content" class="collapsible-content p-4 bg-mint-cream-dark rounded-b-md">
+                        <h3 class="text-xl font-bold text-oxford-blue mb-3">Select Chart Type & Metrics</h3>
                         
                         <div class="mb-4">
-                            <label for="chart-type-select" class="block text-sm font-medium text-slate-700 mb-1">Select Chart Type</label>
-                            <select id="chart-type-select" class="block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                            <label for="chart-type-select" class="block text-sm font-medium text-oxford-blue-medium mb-1">Select Chart Type</label>
+                            <select id="chart-type-select" class="block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink">
                                 <option value="radar">Performance Profile (Radar Chart)</option>
                                 <option value="bar">Metric Comparison (Bar Chart)</option>
                                 <option value="horizontalBar">Single Metric Comparison (Horizontal Bar Chart)</option>
@@ -268,117 +297,117 @@
                         </div>
                         
                         <div class="flex flex-wrap gap-4 mt-4">
-                            <button id="add-chart-to-dashboard-btn" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200">Add Chart to Dashboard</button>
-                            <button id="reset-metrics-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200">Reset Metric Selection</button>
+                            <button id="add-chart-to-dashboard-btn" class="bg-hot-pink hover:bg-hot-pink-dark text-mint-cream font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200">Add Chart to Dashboard</button>
+                            <button id="reset-metrics-btn" class="bg-oxford-blue-light hover:bg-oxford-blue-dark text-mint-cream font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200">Reset Metric Selection</button>
                         </div>
                     </div>
                 </section>
 
                 <!-- Selected Visualizations Section -->
-                <section id="selected-visualizations-section" class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mb-8 hidden">
-                    <div class="collapsible-header bg-slate-100 hover:bg-slate-200 p-3 rounded-md flex justify-between items-center text-lg font-semibold" data-target="#active-charts-display-area">
+                <section id="selected-visualizations-section" class="max-w-4xl mx-auto bg-mint-cream p-6 rounded-xl shadow-md mb-8 hidden">
+                    <div class="collapsible-header bg-oxford-blue-light hover:bg-oxford-blue-dark p-3 rounded-md flex justify-between items-center text-lg font-semibold text-mint-cream" data-target="#active-charts-display-area">
                         <span>Selected Visualizations</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div id="active-charts-display-area" class="collapsible-content p-4 bg-slate-50 rounded-b-md">
-                        <p id="no-charts-message" class="text-center text-slate-500 mt-4">Add charts using the "Customize Charts" section above.</p>
+                    <div id="active-charts-display-area" class="collapsible-content p-4 bg-mint-cream-dark rounded-b-md">
+                        <p id="no-charts-message" class="text-center text-oxford-blue-medium mt-4">Add charts using the "Customize Charts" section above.</p>
                         <!-- Dynamic chart containers will be inserted here -->
                     </div>
                 </section>
 
                 <!-- Player Comparison Mode Section -->
-                <section id="player-comparison-section" class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mb-8">
-                    <div class="collapsible-header bg-slate-100 hover:bg-slate-200 p-3 rounded-md flex justify-between items-center text-lg font-semibold" data-target="#player-comparison-content">
+                <section id="player-comparison-section" class="max-w-4xl mx-auto bg-mint-cream p-6 rounded-xl shadow-md mb-8">
+                    <div class="collapsible-header bg-oxford-blue-light hover:bg-oxford-blue-dark p-3 rounded-md flex justify-between items-center text-lg font-semibold text-mint-cream" data-target="#player-comparison-content">
                         <span>Player Comparison Mode</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div id="player-comparison-content" class="collapsible-content p-4 bg-slate-50 rounded-b-md">
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Compare Players Side-by-Side</h3>
+                    <div id="player-comparison-content" class="collapsible-content p-4 bg-mint-cream-dark rounded-b-md">
+                        <h3 class="text-xl font-bold text-oxford-blue mb-3">Compare Players Side-by-Side</h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <div>
-                                <label for="compare-player-1" class="block text-sm font-medium text-slate-700 mb-1">Player 1</label>
-                                <select id="compare-player-1" class="block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                                <label for="compare-player-1" class="block text-sm font-medium text-oxford-blue-medium mb-1">Player 1</label>
+                                <select id="compare-player-1" class="block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink">
                                     <option value="">Select Player</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="compare-player-2" class="block text-sm font-medium text-slate-700 mb-1">Player 2</label>
-                                <select id="compare-player-2" class="block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                                <label for="compare-player-2" class="block text-sm font-medium text-oxford-blue-medium mb-1">Player 2</label>
+                                <select id="compare-player-2" class="block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink">
                                     <option value="">Select Player</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="compare-player-3" class="block text-sm font-medium text-slate-700 mb-1">Player 3</label>
-                                <select id="compare-player-3" class="block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                                <label for="compare-player-3" class="block text-sm font-medium text-oxford-blue-medium mb-1">Player 3</label>
+                                <select id="compare-player-3" class="block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink">
                                     <option value="">Select Player</option>
                                 </select>
                             </div>
                         </div>
-                        <button id="compare-players-btn" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">Compare Selected Players</button>
+                        <button id="compare-players-btn" class="bg-hot-pink hover:bg-hot-pink-dark text-mint-cream font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">Compare Selected Players</button>
                         <div id="comparison-table-container" class="mt-6 hidden">
                             <div class="overflow-x-auto">
-                                <table id="comparison-table" class="min-w-full divide-y divide-slate-200">
+                                <table id="comparison-table" class="min-w-full divide-y divide-oxford-blue-light">
                                     <!-- Comparison table content will be dynamically loaded here -->
                                 </table>
-                                <p id="comparison-message" class="text-center text-slate-500 mt-4 hidden">Please select at least two players for comparison.</p>
+                                <p id="comparison-message" class="text-center text-oxford-blue-medium mt-4 hidden">Please select at least two players for comparison.</p>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Detailed Metrics Breakdown Section -->
-                <section id="detailed-metrics-section" class="bg-white p-6 rounded-xl shadow-md mb-8">
-                    <div class="collapsible-header bg-slate-100 hover:bg-slate-200 p-3 rounded-md flex justify-between items-center text-lg font-semibold" data-target="#detailed-metrics-content">
+                <section id="detailed-metrics-section" class="bg-mint-cream p-6 rounded-xl shadow-md mb-8">
+                    <div class="collapsible-header bg-oxford-blue-light hover:bg-oxford-blue-dark p-3 rounded-md flex justify-between items-center text-lg font-semibold text-mint-cream" data-target="#detailed-metrics-content">
                         <span>Detailed Metric Breakdown</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div id="detailed-metrics-content" class="collapsible-content p-4 bg-slate-50 rounded-b-md">
-                        <p class="text-sm text-slate-600 mb-4">Categorized metrics showing player's value, group average, and percentile rank.</p>
+                    <div id="detailed-metrics-content" class="collapsible-content p-4 bg-mint-cream-dark rounded-b-md">
+                        <p class="text-sm text-oxford-blue-medium mb-4">Categorized metrics showing player's value, group average, and percentile rank.</p>
                         <!-- Conditional Formatting Customization -->
-                        <div class="mb-4 p-3 bg-slate-100 rounded-lg">
-                            <h4 class="text-md font-semibold text-slate-800 mb-2">Conditional Formatting Thresholds</h4>
+                        <div class="mb-4 p-3 bg-mint-cream rounded-lg">
+                            <h4 class="text-md font-semibold text-oxford-blue mb-2">Conditional Formatting Thresholds</h4>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label for="good-threshold" class="block text-sm font-medium text-slate-700">Good Performance (Percentile >=)</label>
-                                    <input type="number" id="good-threshold" min="50" max="100" value="75" class="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <label for="good-threshold" class="block text-sm font-medium text-oxford-blue-medium">Good Performance (Percentile >=)</label>
+                                    <input type="number" id="good-threshold" min="50" max="100" value="75" class="mt-1 block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink">
                                 </div>
                                 <div>
-                                    <label for="poor-threshold" class="block text-sm font-medium text-slate-700">Poor Performance (Percentile <=)</label>
-                                    <input type="number" id="poor-threshold" min="0" max="50" value="25" class="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <label for="poor-threshold" class="block text-sm font-medium text-oxford-blue-medium">Poor Performance (Percentile <=)</label>
+                                    <input type="number" id="poor-threshold" min="0" max="50" value="25" class="mt-1 block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink">
                                 </div>
                             </div>
-                            <button id="apply-formatting-btn" class="mt-4 bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200">Apply Formatting</button>
+                            <button id="apply-formatting-btn" class="mt-4 bg-hot-pink hover:bg-hot-pink-dark text-mint-cream font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200">Apply Formatting</button>
                         </div>
 
                         <div id="categorized-metrics-table-container">
                             <!-- Categories and metrics table will be dynamically inserted here -->
                         </div>
-                        <button id="export-detailed-csv-btn" class="mt-4 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-4 rounded-full text-sm">Export Detailed Metrics as CSV</button>
+                        <button id="export-detailed-csv-btn" class="mt-4 bg-oxford-blue-light hover:bg-oxford-blue-dark text-mint-cream font-bold py-2 px-4 rounded-full text-sm">Export Detailed Metrics as CSV</button>
                     </div>
                 </section>
 
                 <!-- AI-Powered Scouting Insight Section -->
-                <section id="ai-insight-section" class="bg-white p-6 rounded-xl shadow-md">
-                    <div class="collapsible-header bg-slate-100 hover:bg-slate-200 p-3 rounded-md flex justify-between items-center text-lg font-semibold" data-target="#ai-insight-content">
+                <section id="ai-insight-section" class="bg-mint-cream p-6 rounded-xl shadow-md">
+                    <div class="collapsible-header bg-oxford-blue-light hover:bg-oxford-blue-dark p-3 rounded-md flex justify-between items-center text-lg font-semibold text-mint-cream" data-target="#ai-insight-content">
                         <span>✨ AI-Powered Scouting Insight</span>
                         <span class="arrow">▼</span>
                     </div>
-                    <div id="ai-insight-content" class="collapsible-content p-4 bg-slate-50 rounded-b-md">
-                        <p class="text-sm text-slate-600 mb-4">Generate a narrative scouting report highlighting strengths and weaknesses based on the current player's data.</p>
-                        <button id="generate-insight-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <div id="ai-insight-content" class="collapsible-content p-4 bg-mint-cream-dark rounded-b-md">
+                        <p class="text-sm text-oxford-blue-medium mb-4">Generate a narrative scouting report highlighting strengths and weaknesses based on the current player's data.</p>
+                        <button id="generate-insight-btn" class="bg-hot-pink hover:bg-hot-pink-dark text-mint-cream font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                             Generate Insight
                         </button>
-                        <div id="insight-output" class="mt-4 p-4 bg-slate-50 rounded-lg text-slate-700 hidden">
+                        <div id="insight-output" class="mt-4 p-4 bg-mint-cream rounded-lg text-oxford-blue-medium hidden">
                             <p id="insight-text" class="whitespace-pre-wrap"></p>
-                            <p id="insight-loading" class="text-center text-sky-600 hidden">Generating insight...</p>
+                            <p id="insight-loading" class="text-center text-hot-pink hidden">Generating insight...</p>
                         </div>
                     </div>
                 </section>
 
                 <!-- Report Export Section -->
-                <section id="report-export-section" class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mt-8">
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Export Full Report</h3>
-                    <p class="text-sm text-slate-600 mb-4">Download a PDF version of the entire dashboard content for offline viewing or sharing.</p>
+                <section id="report-export-section" class="max-w-4xl mx-auto bg-mint-cream p-6 rounded-xl shadow-md mt-8">
+                    <h3 class="text-xl font-bold text-oxford-blue mb-3">Export Full Report</h3>
+                    <p class="text-sm text-oxford-blue-medium mb-4">Download a PDF version of the entire dashboard content for offline viewing or sharing.</p>
                     <button id="download-pdf-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200">
                         Download Full Report as PDF
                     </button>
@@ -387,7 +416,7 @@
             </div>
             <!-- Initial message when no data is loaded -->
             <div id="initial-message" class="text-center py-12">
-                <p class="text-slate-500">Your interactive dashboard will appear here once you upload data.</p>
+                <p class="text-oxford-blue-medium">Your interactive dashboard will appear here once you upload data.</p>
             </div>
         </main>
     </div>
@@ -872,8 +901,8 @@
                 const div = document.createElement('div');
                 div.classList.add('mb-4');
                 div.innerHTML = `
-                    <label for="${id}" class="block text-sm font-medium text-slate-700 mb-1">${labelText}</label>
-                    <select id="${id}" class="block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                    <label for="${id}" class="block text-sm font-medium text-oxford-blue-medium mb-1">${labelText}</label>
+                    <select id="${id}" class="block w-full p-2 border border-oxford-blue-light rounded-md shadow-sm focus:ring-hot-pink focus:border-hot-pink">
                         <option value="">Select Metric</option>
                     </select>
                 `;
@@ -893,7 +922,7 @@
             const createMetricCheckboxes = (namePrefix, labelText, selectedMetricsSet) => {
                 const div = document.createElement('div');
                 div.classList.add('mb-4');
-                div.innerHTML = `<label class="block text-sm font-medium text-slate-700 mb-2">${labelText}</label><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2" id="${namePrefix}-checkboxes"></div>`;
+                div.innerHTML = `<label class="block text-sm font-medium text-oxford-blue-medium mb-2">${labelText}</label><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2" id="${namePrefix}-checkboxes"></div>`;
                 const checkboxesContainer = div.querySelector(`#${namePrefix}-checkboxes`);
                 
                 relevantNumericMetrics.forEach(metric => {
@@ -904,13 +933,13 @@
                     input.id = `${namePrefix}-${metric}`;
                     input.name = `${namePrefix}-metric`;
                     input.value = metric;
-                    input.classList.add('form-checkbox', 'h-4', 'w-4', 'text-sky-600', 'rounded', 'focus:ring-sky-500');
+                    input.classList.add('form-checkbox', 'h-4', 'w-4', 'text-hot-pink', 'rounded', 'focus:ring-hot-pink');
                     if (selectedMetricsSet.has(metric)) {
                         input.checked = true;
                     }
                     const label = document.createElement('label');
                     label.htmlFor = `${namePrefix}-${metric}`;
-                    label.classList.add('ml-2', 'text-sm', 'text-slate-700');
+                    label.classList.add('ml-2', 'text-sm', 'text-oxford-blue-medium');
                     label.textContent = metric.replace(/_/g, ' ');
                     checkboxDiv.appendChild(input);
                     checkboxDiv.appendChild(label); // Append the label to the div
@@ -1007,7 +1036,7 @@
             // Create chart wrapper div
             const chartWrapper = document.createElement('div');
             chartWrapper.id = `chart-wrapper-${chartId}`;
-            chartWrapper.classList.add('bg-white', 'p-6', 'rounded-xl', 'shadow-md', 'mb-8', 'border', 'border-slate-200');
+            chartWrapper.classList.add('bg-mint-cream', 'p-6', 'rounded-xl', 'shadow-md', 'mb-8', 'border', 'border-oxford-blue-light');
             
             // Determine chart title and description based on selectedChartType
             switch (selectedChartType) {
@@ -1073,12 +1102,12 @@
             }
 
             chartWrapper.innerHTML = `
-                <h3 class="text-xl font-bold text-slate-900 mb-2">${chartTitle}</h3>
-                <p class="text-sm text-slate-600 mb-4">${chartDescription}</p>
+                <h3 class="text-xl font-bold text-oxford-blue mb-2">${chartTitle}</h3>
+                <p class="text-sm text-oxford-blue-medium mb-4">${chartDescription}</p>
                 <div class="chart-container"><canvas id="${chartId}"></canvas></div>
-                <p id="message-${chartId}" class="text-center text-slate-500 mt-4 hidden">No data to display this chart.</p>
+                <p id="message-${chartId}" class="text-center text-oxford-blue-medium mt-4 hidden">No data to display this chart.</p>
                 <div class="flex flex-wrap gap-2 mt-4">
-                    <button class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-4 rounded-full text-sm export-chart-btn" data-chart-id="${chartId}">Export Chart as PNG</button>
+                    <button class="bg-oxford-blue-light hover:bg-oxford-blue-dark text-mint-cream font-bold py-2 px-4 rounded-full text-sm export-chart-btn" data-chart-id="${chartId}">Export Chart as PNG</button>
                     <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full text-sm remove-chart-btn" data-chart-id="${chartId}">Remove Chart</button>
                 </div>
             `;
@@ -1396,23 +1425,23 @@
                 const arrowClass = isExpanded ? 'expanded' : '';
 
                 let html = `
-                    <div class="mb-4 bg-slate-50 rounded-lg shadow-sm overflow-hidden">
-                        <div class="collapsible-header bg-slate-100 hover:bg-slate-200 p-4 font-semibold text-lg text-slate-800 flex justify-between items-center rounded-md ${expandedClass}" data-target="#${id}">
+                    <div class="mb-4 bg-mint-cream-dark rounded-lg shadow-sm overflow-hidden">
+                        <div class="collapsible-header bg-oxford-blue-light hover:bg-oxford-blue-dark p-4 font-semibold text-lg text-mint-cream flex justify-between items-center rounded-md ${expandedClass}" data-target="#${id}">
                             <span>${categoryName}</span>
                             <span class="arrow">▼</span>
                         </div>
                         <div id="${id}" class="collapsible-content p-4 ${expandedClass}">
                             <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-slate-200">
-                                    <thead class="bg-white">
+                                <table class="min-w-full divide-y divide-oxford-blue-light">
+                                    <thead class="bg-mint-cream">
                                         <tr>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Metric</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Player Value</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Group Average</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Percentile Rank</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-oxford-blue-medium uppercase tracking-wider">Metric</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-oxford-blue-medium uppercase tracking-wider">Player Value</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-oxford-blue-medium uppercase tracking-wider">Group Average</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-oxford-blue-medium uppercase tracking-wider">Percentile Rank</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="bg-white divide-y divide-slate-200">
+                                    <tbody class="bg-mint-cream divide-y divide-oxford-blue-light">
                 `;
                 
                 let hasMetrics = false;
@@ -1426,13 +1455,13 @@
 
                     html += `
                         <tr class="${rowClass}">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">${item.metric.replace(/_/g, ' ')}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${item.playerValue.toFixed(2)}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${item.average.toFixed(2)}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-oxford-blue">${item.metric.replace(/_/g, ' ')}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-oxford-blue-medium">${item.playerValue.toFixed(2)}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-oxford-blue-medium">${item.average.toFixed(2)}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-oxford-blue-medium">
                                 <div class="flex items-center">
-                                    <div class="w-20 bg-slate-200 rounded-full h-2.5">
-                                        <div class="bg-sky-500 h-2.5 rounded-full" style="width: ${item.percentile.toFixed(0)}%"></div>
+                                    <div class="w-20 bg-oxford-blue-light rounded-full h-2.5">
+                                        <div class="bg-hot-pink h-2.5 rounded-full" style="width: ${item.percentile.toFixed(0)}%"></div>
                                     </div>
                                     <span class="ml-3 font-medium">${item.percentile.toFixed(0)}%</span>
                                 </div>
@@ -1707,12 +1736,12 @@
                     datasets: [{
                         label: `${playerName} Percentile Rank`,
                         data: data,
-                        backgroundColor: 'rgba(56, 189, 248, 0.2)', // sky-400 with opacity
-                        borderColor: 'rgba(14, 165, 233, 1)', // sky-600
-                        pointBackgroundColor: 'rgba(14, 165, 233, 1)',
+                        backgroundColor: 'rgba(237, 37, 78, 0.2)', /* Hot Pink with opacity */
+                        borderColor: 'rgba(237, 37, 78, 1)', /* Hot Pink solid */
+                        pointBackgroundColor: 'rgba(237, 37, 78, 1)',
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(14, 165, 233, 1)'
+                        pointHoverBorderColor: 'rgba(237, 37, 78, 1)'
                     }]
                 },
                 options: {
@@ -1725,19 +1754,19 @@
                             ticks: {
                                 stepSize: 25,
                                 backdropColor: 'transparent', // Make tick labels transparent background
-                                color: '#64748b' // slate-500
+                                color: '#011936' /* Oxford Blue */
                             },
                             grid: {
-                                color: '#e2e8f0' // slate-200
+                                color: '#1a3350' /* Lighter Oxford Blue */
                             },
                             angleLines: {
-                                color: '#e2e8f0' // slate-200
+                                color: '#1a3350' /* Lighter Oxford Blue */
                             },
                             pointLabels: {
                                 font: {
                                     size: 12
                                 },
-                                color: '#334155' // slate-700
+                                color: '#011936' /* Oxford Blue */
                             }
                         }
                     },
@@ -1745,7 +1774,7 @@
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#334155' // slate-700
+                                color: '#011936' /* Oxford Blue */
                             }
                         },
                         tooltip: {
@@ -1775,15 +1804,15 @@
                         {
                             label: playerName,
                             data: playerValues,
-                            backgroundColor: 'rgba(56, 189, 248, 0.8)', // sky-400 with opacity
-                            borderColor: 'rgba(14, 165, 233, 1)', // sky-600
+                            backgroundColor: 'rgba(237, 37, 78, 0.8)', /* Hot Pink with opacity */
+                            borderColor: 'rgba(237, 37, 78, 1)', /* Hot Pink solid */
                             borderWidth: 1
                         },
                         {
                             label: 'Group Average',
                             data: averageValues,
-                            backgroundColor: 'rgba(203, 213, 225, 0.8)', // slate-300 with opacity
-                            borderColor: 'rgba(100, 116, 139, 1)', // slate-500
+                            backgroundColor: 'rgba(1, 25, 54, 0.8)', /* Oxford Blue with opacity */
+                            borderColor: 'rgba(1, 25, 54, 1)', /* Oxford Blue solid */
                             borderWidth: 1
                         }
                     ]
@@ -1795,22 +1824,22 @@
                         y: {
                             beginAtZero: true,
                             grid: {
-                                color: '#e2e8f0' // slate-200
+                                color: '#1a3350' /* Lighter Oxford Blue */
                             },
-                            ticks: { color: '#64748b' } // slate-500
+                            ticks: { color: '#011936' } /* Oxford Blue */
                         },
                         x: {
                             grid: {
                                 display: false
                             },
-                            ticks: { color: '#64748b' } // slate-500
+                            ticks: { color: '#011936' } /* Oxford Blue */
                         }
                     },
                     plugins: {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#334155' // slate-700
+                                color: '#011936' /* Oxford Blue */
                             }
                         },
                         tooltip: {
@@ -1845,15 +1874,15 @@
                         {
                             label: selectedPlayer.Player_Name,
                             data: [playerValue],
-                            backgroundColor: 'rgba(56, 189, 248, 0.8)', // sky-400
-                            borderColor: 'rgba(14, 165, 233, 1)',
+                            backgroundColor: 'rgba(237, 37, 78, 0.8)', /* Hot Pink */
+                            borderColor: 'rgba(237, 37, 78, 1)',
                             borderWidth: 1
                         },
                         {
                             label: 'Group Average',
                             data: [averageValue],
-                            backgroundColor: 'rgba(203, 213, 225, 0.8)', // slate-300
-                            borderColor: 'rgba(100, 116, 139, 1)',
+                            backgroundColor: 'rgba(1, 25, 54, 0.8)', /* Oxford Blue */
+                            borderColor: 'rgba(1, 25, 54, 1)',
                             borderWidth: 1
                         }
                     ]
@@ -1865,16 +1894,16 @@
                     scales: {
                         x: {
                             beginAtZero: true,
-                            grid: { color: '#e2e8f0' },
-                            ticks: { color: '#64748b' }
+                            grid: { color: '#1a3350' }, /* Lighter Oxford Blue */
+                            ticks: { color: '#011936' } /* Oxford Blue */
                         },
                         y: {
                             grid: { display: false },
-                            ticks: { color: '#64748b' }
+                            ticks: { color: '#011936' } /* Oxford Blue */
                         }
                     },
                     plugins: {
-                        legend: { position: 'top', labels: { color: '#334155' } },
+                        legend: { position: 'top', labels: { color: '#011936' } }, /* Oxford Blue */
                         tooltip: { enabled: false, external: externalTooltipHandler }
                     }
                 }
@@ -1901,8 +1930,8 @@
                     labels: [`${metric.replace(/_/g, ' ')} Percentile`, 'Remaining'],
                     datasets: [{
                         data: [percentile, 100 - percentile],
-                        backgroundColor: ['rgba(56, 189, 248, 0.8)', 'rgba(203, 213, 225, 0.8)'], // sky-400, slate-300
-                        borderColor: ['rgba(14, 165, 233, 1)', 'rgba(100, 116, 139, 1)'],
+                        backgroundColor: ['rgba(237, 37, 78, 0.8)', 'rgba(1, 25, 54, 0.8)'], /* Hot Pink, Oxford Blue */
+                        borderColor: ['rgba(237, 37, 78, 1)', 'rgba(1, 25, 54, 1)'],
                         borderWidth: 1
                     }]
                 },
@@ -1911,7 +1940,7 @@
                     maintainAspectRatio: false,
                     cutout: '70%', // Make it a ring chart
                     plugins: {
-                        legend: { position: 'top', labels: { color: '#334155' } },
+                        legend: { position: 'top', labels: { color: '#011936' } }, /* Oxford Blue */
                         tooltip: { enabled: false, external: externalTooltipHandler }
                     }
                 }
@@ -1948,8 +1977,8 @@
                 {
                     label: 'Other Players',
                     data: otherPlayersPoints,
-                    backgroundColor: 'rgba(100, 116, 139, 0.6)', // slate-500
-                    borderColor: 'rgba(100, 116, 139, 1)',
+                    backgroundColor: 'rgba(1, 25, 54, 0.6)', /* Oxford Blue */
+                    borderColor: 'rgba(1, 25, 54, 1)',
                     parsing: {
                         xAxisKey: 'x',
                         yAxisKey: 'y',
@@ -1962,8 +1991,8 @@
                 datasets.push({
                     label: selectedPlayer.Player_Name,
                     data: [currentPlayerPoint],
-                    backgroundColor: 'rgba(14, 165, 233, 0.8)', // sky-600
-                    borderColor: 'rgba(14, 165, 233, 1)',
+                    backgroundColor: 'rgba(237, 37, 78, 0.8)', /* Hot Pink */
+                    borderColor: 'rgba(237, 37, 78, 1)',
                     parsing: {
                         xAxisKey: 'x',
                         yAxisKey: 'y',
@@ -1980,18 +2009,18 @@
                     maintainAspectRatio: false,
                     scales: {
                         x: {
-                            title: { display: true, text: metricX.replace(/_/g, ' '), color: '#64748b' },
-                            grid: { color: '#e2e8f0' },
-                            ticks: { color: '#64748b' }
+                            title: { display: true, text: metricX.replace(/_/g, ' '), color: '#011936' }, /* Oxford Blue */
+                            grid: { color: '#1a3350' }, /* Lighter Oxford Blue */
+                            ticks: { color: '#011936' } /* Oxford Blue */
                         },
                         y: {
-                            title: { display: true, text: metricY.replace(/_/g, ' '), color: '#64748b' },
-                            grid: { color: '#e2e8f0' },
-                            ticks: { color: '#64748b' }
+                            title: { display: true, text: metricY.replace(/_/g, ' '), color: '#011936' }, /* Oxford Blue */
+                            grid: { color: '#1a3350' }, /* Lighter Oxford Blue */
+                            ticks: { color: '#011936' } /* Oxford Blue */
                         }
                     },
                     plugins: {
-                        legend: { position: 'top', labels: { color: '#334155' } },
+                        legend: { position: 'top', labels: { color: '#011936' } }, /* Oxford Blue */
                         tooltip: { enabled: false, external: externalTooltipHandler }
                     }
                 }
@@ -2007,8 +2036,18 @@
                 return null;
             }
 
-            const backgroundColors = labels.map((_, i) => `hsl(${i * (360 / labels.length)}, 70%, 70%)`);
-            const borderColors = labels.map((_, i) => `hsl(${i * (360 / labels.length)}, 70%, 50%)`);
+            // Using HSL for a range of colors that fit the new palette
+            const baseHue = 330; // Starting hue for Hot Pink
+            const hueStep = 60; // Step to get variations
+
+            const backgroundColors = labels.map((_, i) => {
+                const hue = (baseHue + i * hueStep) % 360;
+                return `hsla(${hue}, 80%, 60%, 0.7)`;
+            });
+            const borderColors = labels.map((_, i) => {
+                const hue = (baseHue + i * hueStep) % 360;
+                return `hsla(${hue}, 80%, 40%, 1)`;
+            });
 
             return new Chart(ctx, {
                 type: 'polarArea',
@@ -2028,12 +2067,12 @@
                     scales: {
                         r: {
                             beginAtZero: true,
-                            ticks: { backdropColor: 'transparent', color: '#64748b' },
-                            grid: { color: '#e2e8f0' }
+                            ticks: { backdropColor: 'transparent', color: '#011936' }, /* Oxford Blue */
+                            grid: { color: '#1a3350' } /* Lighter Oxford Blue */
                         }
                     },
                     plugins: {
-                        legend: { position: 'top', labels: { color: '#334155' } },
+                        legend: { position: 'top', labels: { color: '#011936' } }, /* Oxford Blue */
                         tooltip: { enabled: false, external: externalTooltipHandler }
                     }
                 }
@@ -2058,8 +2097,8 @@
 
             const labels = dataPoints.map(p => p.x);
             const data = dataPoints.map(p => p.y);
-            const pointBackgroundColors = dataPoints.map(p => p.isCurrentPlayer ? 'rgba(14, 165, 233, 1)' : 'rgba(100, 116, 139, 0.6)');
-            const pointBorderColors = dataPoints.map(p => p.isCurrentPlayer ? '#fff' : 'rgba(100, 116, 139, 1)');
+            const pointBackgroundColors = dataPoints.map(p => p.isCurrentPlayer ? 'rgba(237, 37, 78, 1)' : 'rgba(1, 25, 54, 0.6)'); /* Hot Pink, Oxford Blue */
+            const pointBorderColors = dataPoints.map(p => p.isCurrentPlayer ? '#fff' : 'rgba(1, 25, 54, 1)'); /* Oxford Blue */
             const pointRadii = dataPoints.map(p => p.isCurrentPlayer ? 6 : 3);
 
 
@@ -2071,7 +2110,7 @@
                         label: `${metric.replace(/_/g, ' ')} Values`,
                         data: data,
                         fill: false,
-                        borderColor: 'rgba(56, 189, 248, 0.8)', // sky-400
+                        borderColor: 'rgba(237, 37, 78, 0.8)', /* Hot Pink */
                         tension: 0.1,
                         pointBackgroundColor: pointBackgroundColors,
                         pointBorderColor: pointBorderColors,
@@ -2084,19 +2123,19 @@
                     maintainAspectRatio: false,
                     scales: {
                         x: {
-                            title: { display: true, text: 'Players', color: '#64748b' },
+                            title: { display: true, text: 'Players', color: '#011936' }, /* Oxford Blue */
                             grid: { display: false },
-                            ticks: { color: '#64748b', autoSkip: true, maxRotation: 90, minRotation: 45 } // Rotate labels for readability
+                            ticks: { color: '#011936', autoSkip: true, maxRotation: 90, minRotation: 45 } // Rotate labels for readability
                         },
                         y: {
                             beginAtZero: true,
-                            title: { display: true, text: metric.replace(/_/g, ' '), color: '#64748b' },
-                            grid: { color: '#e2e8f0' },
-                            ticks: { color: '#64748b' }
+                            title: { display: true, text: metric.replace(/_/g, ' '), color: '#011936' }, /* Oxford Blue */
+                            grid: { color: '#1a3350' }, /* Lighter Oxford Blue */
+                            ticks: { color: '#011936' } /* Oxford Blue */
                         }
                     },
                     plugins: {
-                        legend: { position: 'top', labels: { color: '#334155' } },
+                        legend: { position: 'top', labels: { color: '#011936' } }, /* Oxford Blue */
                         tooltip: { enabled: false, external: externalTooltipHandler }
                     }
                 }
@@ -2196,15 +2235,15 @@
             // Create table header
             let headerHtml = `
                 <thead>
-                    <tr class="bg-white">
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Metric</th>
+                    <tr class="bg-mint-cream">
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-oxford-blue-medium uppercase tracking-wider">Metric</th>
             `;
             selectedPlayersData.forEach(player => {
-                headerHtml += `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">${player.Player_Name} (${player.Team})</th>`;
+                headerHtml += `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-oxford-blue-medium uppercase tracking-wider">${player.Player_Name} (${player.Team})</th>`;
             });
             headerHtml += `</tr></thead>`;
             
-            let tableBodyHtml = `<tbody class="bg-white divide-y divide-slate-200">`;
+            let tableBodyHtml = `<tbody class="bg-mint-cream divide-y divide-oxford-blue-light">`;
 
             let hasAnyMetricsToDisplay = false;
 
@@ -2214,15 +2253,15 @@
                 if (metricsInThisCategory.length > 0) {
                     hasAnyMetricsToDisplay = true;
                     tableBodyHtml += `
-                        <tr class="bg-slate-100">
-                            <td colspan="${selectedPlayersData.length + 1}" class="px-6 py-3 text-left text-sm font-semibold text-slate-800">${categoryName.replace(/_/g, ' ')} Metrics</td>
+                        <tr class="bg-mint-cream-dark">
+                            <td colspan="${selectedPlayersData.length + 1}" class="px-6 py-3 text-left text-sm font-semibold text-oxford-blue">${categoryName.replace(/_/g, ' ')} Metrics</td>
                         </tr>
                     `;
                     metricsInThisCategory.forEach(metric => {
-                        tableBodyHtml += `<tr><td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">${metric.replace(/_/g, ' ')}</td>`;
+                        tableBodyHtml += `<tr><td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-oxford-blue">${metric.replace(/_/g, ' ')}</td>`;
                         selectedPlayersData.forEach(player => {
                             const value = player[metric];
-                            tableBodyHtml += `<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${typeof value === 'number' && !isNaN(value) ? value.toFixed(2) : '-'}</td>`;
+                            tableBodyHtml += `<td class="px-6 py-4 whitespace-nowrap text-sm text-oxford-blue-medium">${typeof value === 'number' && !isNaN(value) ? value.toFixed(2) : '-'}</td>`;
                         });
                         tableBodyHtml += `</tr>`;
                     });
