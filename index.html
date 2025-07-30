@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports Scout Analytics Dashboard</title>
+    <title>Soccer Scout Analytics Dashboard</title>
     <!-- Tailwind CSS CDN for rapid styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN for visualizations -->
@@ -158,14 +158,14 @@
     <div class="container mx-auto p-4 md:p-8">
         <!-- Header Section -->
         <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-oxford-blue">Sports Scout Analytics Dashboard</h1>
+            <h1 class="text-4xl font-bold text-oxford-blue">Soccer Scouting Analytics Dashboard</h1>
             <p class="mt-2 text-lg text-oxford-blue-medium">Analyze player performance with interactive charts and AI insights.</p>
         </header>
 
         <main id="dashboard-main-content">
             <!-- Introduction & How-to Section -->
             <section id="intro-how-to" class="max-w-4xl mx-auto bg-mint-cream p-6 rounded-xl shadow-md mb-8">
-                <h2 class="text-2xl font-bold text-oxford-blue mb-4">Welcome to the Sports Scout Analytics Dashboard!</h2>
+                <h2 class="text-2xl font-bold text-oxford-blue mb-4">Welcome to the Soccer Scouting Analytics Dashboard!</h2>
                 <p class="text-oxford-blue-medium mb-4">
                     This interactive dashboard is designed to help you analyze soccer player performance data efficiently.
                     By uploading your CSV or Excel files, you can gain deep insights into individual players, compare them against peers, and even generate AI-powered scouting reports.
@@ -178,35 +178,35 @@
                     <h3 class="text-xl font-bold text-oxford-blue mb-3">How to Use This Dashboard:</h3>
                     <ol class="list-decimal list-inside text-oxford-blue-medium space-y-3">
                         <li>
-                            <strong>1. Upload Your Data:</strong>
+                            <strong>Upload Your Data:</strong>
                             <p class="ml-4">Begin by uploading your player performance data. The dashboard supports both <code>.csv</code> and <code>.xlsx</code> (Excel) file formats. You can select multiple files if your data is spread across different documents. The system will process and combine them automatically.</p>
                         </li>
                         <li>
-                            <strong>2. Select a Player:</strong>
+                            <strong>Select a Player:</strong>
                             <p class="ml-4">Once your data is loaded, a dropdown menu will populate with all the players found in your file(s). Choose a player to view their detailed profile and performance analytics.</p>
                         </li>
                         <li>
-                            <strong>3. Define Your Peer Group:</strong>
+                            <strong>Define Your Peer Group:</strong>
                             <p class="ml-4">Use the "Peer Group Filters" to narrow down the comparison group. You can set minimum and maximum age ranges, as well as a minimum number of minutes played, to ensure you're comparing your selected player against relevant peers. Click "Apply Filters" to update the analysis.</p>
                         </li>
                         <li>
-                            <strong>4. Customize Your Visualizations:</strong>
+                            <strong>Customize Your Visualizations:</strong>
                             <p class="ml-4">In the "Customize Charts" section, select your desired chart type from the dropdown. Depending on the chart, you'll then be prompted to choose the specific metrics you wish to visualize. This allows for highly tailored analysis.</p>
                         </li>
                         <li>
-                            <strong>5. Compare Players Side-by-Side:</strong>
+                            <strong>Compare Players Side-by-Side:</strong>
                             <p class="ml-4">Utilize the "Player Comparison Mode" to select up to three players and view their key metrics side-by-side in a comparative table. This is ideal for scouting and recruitment decisions.</p>
                         </li>
                         <li>
-                            <strong>6. Explore Detailed Metrics:</strong>
+                            <strong>Explore Detailed Metrics:</strong>
                             <p class="ml-4">The "Detailed Metric Breakdown" section provides a comprehensive table of all available metrics, showing the player's value, the peer group average, and their percentile rank. You can also adjust conditional formatting thresholds to quickly identify strengths and areas for development.</p>
                         </li>
                         <li>
-                            <strong>7. Generate AI-Powered Insights:</strong>
+                            <strong>Generate AI-Powered Insights:</strong>
                             <p class="ml-4">Get an instant narrative scouting report powered by AI. This feature summarizes a player's performance, highlighting key strengths and weaknesses based on the analyzed data.</p>
                         </li>
                         <li>
-                            <strong>8. Export Your Findings:</strong>
+                            <strong>Export Your Findings:</strong>
                             <p class="ml-4">Easily export individual charts as PNG images, detailed metric tables as CSV files, or download a complete PDF report of the entire dashboard for offline review or sharing.</p>
                         </li>
                     </ol>
@@ -2665,7 +2665,7 @@ Scouting Report:`;
                 await addContentToPdf(section);
             }
             
-            pdf.save('Sports_Scout_Report.pdf');
+            pdf.save('Scout_Report.pdf');
 
             // Revert collapsible sections to their original state after PDF generation
             collapsibleContents.forEach(content => {
