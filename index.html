@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soccer Scout Analytics Dashboard</title>
+    <title>Sports Scout Analytics Dashboard</title>
     <!-- Tailwind CSS CDN for rapid styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN for visualizations -->
@@ -158,14 +158,14 @@
     <div class="container mx-auto p-4 md:p-8">
         <!-- Header Section -->
         <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-oxford-blue">Soccer Scout Analytics Dashboard</h1>
+            <h1 class="text-4xl font-bold text-oxford-blue">Sports Scout Analytics Dashboard</h1>
             <p class="mt-2 text-lg text-oxford-blue-medium">Analyze player performance with interactive charts and AI insights.</p>
         </header>
 
         <main id="dashboard-main-content">
             <!-- Introduction & How-to Section -->
             <section id="intro-how-to" class="max-w-4xl mx-auto bg-mint-cream p-6 rounded-xl shadow-md mb-8">
-                <h2 class="text-2xl font-bold text-oxford-blue mb-4">Welcome to the Soccer Scout Analytics Dashboard!</h2>
+                <h2 class="text-2xl font-bold text-oxford-blue mb-4">Welcome to the Sports Scout Analytics Dashboard!</h2>
                 <p class="text-oxford-blue-medium mb-4">
                     This interactive dashboard is designed to help you analyze soccer player performance data efficiently.
                     By uploading your CSV or Excel files, you can gain deep insights into individual players, compare them against peers, and even generate AI-powered scouting reports.
@@ -178,35 +178,35 @@
                     <h3 class="text-xl font-bold text-oxford-blue mb-3">How to Use This Dashboard:</h3>
                     <ol class="list-decimal list-inside text-oxford-blue-medium space-y-3">
                         <li>
-                            <strong>Upload Your Data:</strong>
+                            <strong>1. Upload Your Data:</strong>
                             <p class="ml-4">Begin by uploading your player performance data. The dashboard supports both <code>.csv</code> and <code>.xlsx</code> (Excel) file formats. You can select multiple files if your data is spread across different documents. The system will process and combine them automatically.</p>
                         </li>
                         <li>
-                            <strong>Select a Player:</strong>
+                            <strong>2. Select a Player:</strong>
                             <p class="ml-4">Once your data is loaded, a dropdown menu will populate with all the players found in your file(s). Choose a player to view their detailed profile and performance analytics.</p>
                         </li>
                         <li>
-                            <strong>Define Your Peer Group:</strong>
+                            <strong>3. Define Your Peer Group:</strong>
                             <p class="ml-4">Use the "Peer Group Filters" to narrow down the comparison group. You can set minimum and maximum age ranges, as well as a minimum number of minutes played, to ensure you're comparing your selected player against relevant peers. Click "Apply Filters" to update the analysis.</p>
                         </li>
                         <li>
-                            <strong>Customize Your Visualizations:</strong>
+                            <strong>4. Customize Your Visualizations:</strong>
                             <p class="ml-4">In the "Customize Charts" section, select your desired chart type from the dropdown. Depending on the chart, you'll then be prompted to choose the specific metrics you wish to visualize. This allows for highly tailored analysis.</p>
                         </li>
                         <li>
-                            <strong>Compare Players Side-by-Side:</strong>
+                            <strong>5. Compare Players Side-by-Side:</strong>
                             <p class="ml-4">Utilize the "Player Comparison Mode" to select up to three players and view their key metrics side-by-side in a comparative table. This is ideal for scouting and recruitment decisions.</p>
                         </li>
                         <li>
-                            <strong>Explore Detailed Metrics:</strong>
+                            <strong>6. Explore Detailed Metrics:</strong>
                             <p class="ml-4">The "Detailed Metric Breakdown" section provides a comprehensive table of all available metrics, showing the player's value, the peer group average, and their percentile rank. You can also adjust conditional formatting thresholds to quickly identify strengths and areas for development.</p>
                         </li>
                         <li>
-                            <strong>Generate AI-Powered Insights:</strong>
+                            <strong>7. Generate AI-Powered Insights:</strong>
                             <p class="ml-4">Get an instant narrative scouting report powered by AI. This feature summarizes a player's performance, highlighting key strengths and weaknesses based on the analyzed data.</p>
                         </li>
                         <li>
-                            <strong>Export Your Findings:</strong>
+                            <strong>8. Export Your Findings:</strong>
                             <p class="ml-4">Easily export individual charts as PNG images, detailed metric tables as CSV files, or download a complete PDF report of the entire dashboard for offline review or sharing.</p>
                         </li>
                     </ol>
@@ -221,7 +221,7 @@
                     <div>
                         <label for="file-upload" class="block text-sm font-medium text-oxford-blue-medium mb-2">1. Upload Player Data (CSV or Excel)</label>
                         <input id="file-upload" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" multiple class="block w-full text-sm text-oxford-blue-medium file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-hot-pink file:text-mint-cream hover:file:bg-hot-pink-dark transition-colors duration-200">
-                        <p id="file-status" class="text-xs text-oxford-blue-medium mt-2">No file selected.</p>
+                        <p id="file-status" class="text-xs text-oxford-blue-medium mt-2">Please upload your data file(s) to begin.</p>
                     </div>
                     <div>
                         <label for="player-select" class="block text-sm font-medium text-oxford-blue-medium mb-2">2. Select a Player</label>
@@ -426,7 +426,8 @@
         let playerData = []; // Stores all cleaned and preprocessed player data
         let currentAnalytics = {}; // Stores analytics for the currently selected player
         let allAvailableMetrics = []; // Stores all numeric metrics found in the dataset
-        let activeCharts = {}; // Stores Chart.js instances, keyed by unique ID
+        let activeCharts = {}; // Stores Chart.js instances and their configurations, keyed by unique ID
+        let dynamicMetricCategories = {}; // Stores dynamically identified metric categories
         
         // Chart specific metric selections (will be updated by the new unified selection)
         let selectedChartType = 'radar'; // Default chart type for configuration
@@ -623,31 +624,39 @@
             'xA', 'xG', 'Crosses_Stopped'
         ];
 
-        const DETAILED_METRIC_CATEGORIES = {
-            'Physical': [
-                'Minutes_Played', 'Appearances', 'Sprints_Per_90', 'Distance_Covered_Per_90', 'High_Intensity_Runs_Per_90',
-                'Ground_Duels_Per_90', 'gDuels_Won_Per_90', 'Aerial_Duels_Per_90', 'aDuels_Won_Per_90',
-                'Carries_Per_90', 'Progressive_Carries_Per_90', 'Dispossessed_Per_90'
-            ],
-            'Technical': [
-                'Goals_Per_90', 'Assists_Per_90', 'Shots_Per_90', 'Shots_On_Target_Per_90', 'Conversion_Pct', 'xG_Per_90', 'xA_Per_90',
-                'Passing_Accuracy_Pct', 'Successful_Passes_Per_90', 'Long_Passes_Per_90', 'Short_Passes_Per_90', 'Through_Balls_Per_90',
-                'Crosses_Per_90', 'Successful_Crosses_Per_90', 'Touches_Per_90', 'Dribbles_Per_90', 'Successful_Dribbles_Per_90',
-                'Saves_Per_90', 'Saves_Pct', 'Penalties_Saved', 'Clean_Sheets', 'Goals_Prevented', 'Clearances_Off_Line', 'Punches', 'High_Claims',
-                'Crosses_Stopped_Per_90'
-            ],
-            'Tactical': [
-                'Interceptions_Per_90', 'Tackles_Per_90', 'Blocks_Per_90', 'Clearances_Per_90', 'Possession_Won_Per_90',
-                'Fouls_Won_Per_90', 'Offsides_Per_90', 'Key_Passes_Per_90', 'Chances_Created_Per_90',
-                'fThird_Passes_Per_90', 'Successful_fThird_Passes_Per_90', 'xGoT_Conceded_Per_90',
-                'Pressures_Per_90', 'Successful_Pressures_Per_90'
-            ],
-            'Mental_Discipline': [ 
-                'Fouls_Per_90', 'Yellow_Cards', 'Red_Cards', 'Big_Chances_Missed_Per_90', 'Own_Goals', 'Leadership_Rating',
-                'Errors_Per_90'
-            ],
+        // This will be dynamically populated based on data headers
+        const DETAILED_METRIC_CATEGORIES_TEMPLATE = {
+            'Physical': [],
+            'Technical': [],
+            'Tactical': [],
+            'Mental_Discipline': [],
             'General': []
         };
+
+        // Helper function to escape HTML entities for DOM insertion
+        function escapeHtml(unsafe) {
+            if (typeof unsafe !== 'string') {
+                return unsafe;
+            }
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;")
+                .replace(/`/g, "&#x60;"); // Escape backticks for HTML context
+        }
+
+        // Helper function to escape backticks, backslashes, and dollar signs for JavaScript template literals
+        function escapeJsTemplateLiteral(unsafe) {
+            if (typeof unsafe !== 'string') {
+                return unsafe;
+            }
+            return unsafe
+                .replace(/\\/g, '\\\\') // Escape backslashes first
+                .replace(/`/g, '\\`')   // Escape backticks
+                .replace(/\$/g, '\\$'); // Escape dollar signs
+        }
 
         // Helper to find a column name from a list of aliases (case-insensitive)
         function findColumn(row, aliases) {
@@ -683,7 +692,7 @@
                 const values = line.split(csvSplitRegex).map(v => v.trim().replace(/^"|"$/g, '')); 
 
                 if (values.length !== headers.length) {
-                    console.warn(`Skipping malformed row ${i + 1} due to column count mismatch: ${line}`);
+                    console.warn(`Skipping malformed row ${i + 1} due to column count mismatch: ${escapeJsTemplateLiteral(line)}`);
                     continue;
                 }
                 const rowObject = {};
@@ -714,10 +723,11 @@
                 }
                 newRow.Season = season;
 
-                newRow.Player_ID = `${newRow.Player_Name}_${newRow.Season}`; 
+                // Escape Player_Name and Season for use in template literal for Player_ID
+                newRow.Player_ID = `${escapeJsTemplateLiteral(String(newRow.Player_Name))}_${escapeJsTemplateLiteral(String(newRow.Season))}`; 
 
                 if (processedDataMap.has(newRow.Player_ID)) {
-                    console.warn(`Skipping duplicate player-season entry for: ${newRow.Player_ID} at row ${rowIndex + 1}`);
+                    console.warn(`Skipping duplicate player-season entry for: ${escapeJsTemplateLiteral(newRow.Player_ID)} at row ${rowIndex + 1}`);
                     return; 
                 }
 
@@ -745,30 +755,65 @@
 
                 const minutes = newRow.Minutes_Played;
 
+                // Corrected aliasesMap
+                const aliasesMap = {
+                    'Goals': ['Gls'],
+                    'Assists': ['Ast'],
+                    'Shots_On_Target': ['SoT', 'Shots on Target'],
+                    'Goals_Conceded': ['GC', 'Goals Conceded'],
+                    'Yellow_Cards': ['Yellow Cards'],
+                    'Red_Cards': ['Red Cards'],
+                    'Own_Goals': ['Own Goals'],
+                    'Big_Chances_Missed': ['Big Chances Missed'],
+                    'Hit_Woodwork': ['Hit Woodwork'],
+                    'Offsides': ['Offsides'],
+                    'Touches': ['Touches'],
+                    'Passes': ['Passes'],
+                    'Successful_Passes': ['Successful Passes'],
+                    'Crosses': ['Crosses'],
+                    'Successful_Crosses': ['Successful Crosses'],
+                    'fThird_Passes': ['fThird Passes', 'Final Third Passes'],
+                    'Successful_fThird_Passes': ['Successful fThird Passes', 'Successful Final Third Passes'],
+                    'Carries': ['Carries'],
+                    'Progressive_Carries': ['Progressive Carries'],
+                    'Carries_Ended_with_Goal': ['Carries Ended with Goal'],
+                    'Carries_Ended_with_Assist': ['Carries Ended with Assist'],
+                    'Carries_Ended_with_Shot': ['Carries Ended with Shot'],
+                    'Carries_Ended_with_Chance': ['Carries Ended with Chance'],
+                    'Possession_Won': ['Possession Won'],
+                    'Dispossessed': ['Dispossessed'],
+                    'Ground_Duels': ['Ground Duels'],
+                    'gDuels_Won': ['gDuels Won', 'Ground Duels Won'],
+                    'Aerial_Duels': ['Aerial Duels'],
+                    'aDuels_Won': ['aDuels Won', 'Aerial Duels Won'],
+                    'Fouls': ['Fouls'],
+                    'xGoT_Conceded': ['xGoT Conceded', 'xGOT Conceded'],
+                    'Goals_Prevented': ['Goals Prevented'],
+                    'Clearances_Off_Line': ['Clearances Off Line'],
+                    'Punches': ['Punches'],
+                    'High_Claims': ['High Claims'],
+                    'Penalties_Saved': ['Penalties Saved'],
+                    'Sprints': ['Sprints'],
+                    'Distance_Covered': ['Distance Covered'],
+                    'High_Intensity_Runs': ['High Intensity Runs'],
+                    'Fouls_Won': ['Fouls Won'],
+                    'Key_Passes': ['Key Passes'],
+                    'Chances_Created': ['Chances Created'],
+                    'Dribbles': ['Dribbles'],
+                    'Successful_Dribbles': ['Successful Dribbles'],
+                    'Pressures': ['Pressures'], // Corrected: Added missing opening quote
+                    'Successful_Pressures': ['Successful Pressures'], 
+                    'Errors': ['Errors'], 
+                    'Long_Passes': ['Long Passes'], 
+                    'Short_Passes': ['Short Passes'],
+                    'xA': ['xA'], 
+                    'xG': ['xG'], 
+                    'Crosses_Stopped': ['Crosses Stopped']
+                };
+
                 BASE_METRICS_FOR_90_CONVERSION.forEach(metricKey => {
                     let rawValue = newRow[metricKey];
-                    const aliasesMap = {
-                        'Goals': ['Gls'], 'Assists': ['Ast'], 'Shots_On_Target': ['SoT'], 'Goals_Conceded': ['GC'],
-                        'Yellow_Cards': ['Yellow Cards'], 'Red_Cards': ['Red Cards'], 'Own_Goals': ['Own Goals'],
-                        'Big_Chances_Missed': ['Big Chances Missed'], 'Hit_Woodwork': ['Hit Woodwork'], 'Offsides': ['Offsides'],
-                        'Touches': ['Touches'], 'Passes': ['Passes'], 'Successful_Passes': ['Successful Passes'],
-                        'Crosses': ['Crosses'], 'Successful_Crosses': ['Successful Crosses'],
-                        'fThird_Passes': ['fThird Passes'], 'Successful_fThird_Passes': ['Successful fThird Passes'],
-                        'Carries': ['Carries'], 'Progressive_Carries': ['Progressive Carries'],
-                        'Carries_Ended_with_Goal': ['Carries Ended with Goal'], 'Carries_Ended_with_Assist': ['Carries Ended with Assist'],
-                        'Carries_Ended_with_Shot': ['Carries Ended with Shot'], 'Carries_Ended_with_Chance': ['Carries Ended with Chance'],
-                        'Possession_Won': ['Possession Won'], 'Dispossessed': ['Dispossessed'],
-                        'Ground_Duels': ['Ground Duels'], 'gDuels_Won': ['gDuels Won'],
-                        'Aerial_Duels': ['Aerial Duels'], 'aDuels_Won': ['aDuels Won'], 'Fouls': ['Fouls'],
-                        'xGoT_Conceded': ['xGoT Conceded'], 'Goals_Prevented': ['Goals Prevented'], 'Clearances_Off_Line': ['Clearances Off Line'],
-                        'Punches': ['Punches'], 'High_Claims': ['High Claims'], 'Penalties_Saved': ['Penalties Saved'],
-                        'Sprints': ['Sprints'], 'Distance_Covered': ['Distance Covered'], 'High_Intensity_Runs': ['High Intensity Runs'],
-                        'Fouls_Won': ['Fouls Won'], 'Key_Passes': ['Key Passes'], 'Chances_Created': ['Chances Created'],
-                        'Dribbles': ['Dribbles'], 'Successful_Dribbles': ['Successful Dribbles'], 'Pressures': ['Pressures'],
-                        'Successful_Pressures': ['Successful Pressures'], 'Errors': ['Errors'], 'Long_Passes': ['Long Passes'],
-                        'Short_Passes': ['Short Passes'], 'xA': ['xA'], 'xG': ['xG'], 'Crosses_Stopped': ['Crosses Stopped']
-                    };
-
+                    
                     if (rawValue === undefined && aliasesMap[metricKey]) {
                         for (const alias of aliasesMap[metricKey]) {
                             const foundAliasKey = Object.keys(newRow).find(key => key.toLowerCase() === alias.toLowerCase());
@@ -852,7 +897,8 @@
             sortedPlayers.forEach(player => {
                 const option = document.createElement('option');
                 option.value = player.Player_Name;
-                option.textContent = `${player.Player_Name} (${player.Team}${player.Season !== 'N/A' ? `, ${player.Season}` : ''})`;
+                // Apply escapeHtml to player name, team, and season
+                option.textContent = `${escapeHtml(player.Player_Name)} (${escapeHtml(player.Team)}${player.Season !== 'N/A' ? `, ${escapeHtml(String(player.Season))}` : ''})`;
                 playerSelect.appendChild(option);
             });
             console.log("Player select dropdown populated.");
@@ -877,7 +923,8 @@
                     sortedPlayers.forEach(player => {
                         const option = document.createElement('option');
                         option.value = player.Player_Name;
-                        option.textContent = `${player.Player_Name} (${player.Team})`;
+                        // Apply escapeHtml to player name and team
+                        option.textContent = `${escapeHtml(player.Player_Name)} (${escapeHtml(player.Team)})`;
                         select.appendChild(option);
                     });
                 }
@@ -892,10 +939,16 @@
             const selectedPlayerName = document.getElementById('player-select').value;
             const selectedPlayer = playerData.find(p => p.Player_Name === selectedPlayerName);
 
+            console.log("Selected player for metric UI:", selectedPlayerName, selectedPlayer);
+            console.log("All available metrics:", allAvailableMetrics);
+
             // Filter metrics to only include those that are numeric and non-zero for the selected player
             const relevantNumericMetrics = allAvailableMetrics.filter(metric => 
                 selectedPlayer && typeof selectedPlayer[metric] === 'number' && !isNaN(selectedPlayer[metric]) && selectedPlayer[metric] !== 0
             ).sort();
+
+            console.log("Relevant numeric metrics for UI:", relevantNumericMetrics);
+
 
             const createMetricDropdown = (id, labelText, selectedValue = '') => {
                 const div = document.createElement('div');
@@ -910,7 +963,7 @@
                 relevantNumericMetrics.forEach(metric => {
                     const option = document.createElement('option');
                     option.value = metric;
-                    option.textContent = metric.replace(/_/g, ' ');
+                    option.textContent = escapeHtml(metric.replace(/_/g, ' ')); // Escaping here
                     select.appendChild(option);
                 });
                 if (selectedValue && relevantNumericMetrics.includes(selectedValue)) {
@@ -930,7 +983,7 @@
                     checkboxDiv.classList.add('flex', 'items-center');
                     const input = document.createElement('input');
                     input.type = 'checkbox';
-                    input.id = `${namePrefix}-${metric}`;
+                    input.id = `${namePrefix}-${metric}`; // Correct ID
                     input.name = `${namePrefix}-metric`;
                     input.value = metric;
                     input.classList.add('form-checkbox', 'h-4', 'w-4', 'text-hot-pink', 'rounded', 'focus:ring-hot-pink');
@@ -938,12 +991,15 @@
                         input.checked = true;
                     }
                     const label = document.createElement('label');
-                    label.htmlFor = `${namePrefix}-${metric}`;
+                    label.htmlFor = `${namePrefix}-${metric}`; // Correct htmlFor
                     label.classList.add('ml-2', 'text-sm', 'text-oxford-blue-medium');
-                    label.textContent = metric.replace(/_/g, ' ');
+                    label.textContent = escapeHtml(metric.replace(/_/g, ' ')); // Setting text content
+                    
                     checkboxDiv.appendChild(input);
-                    checkboxDiv.appendChild(label); // Append the label to the div
+                    checkboxDiv.appendChild(label); // Corrected: Append the label to the checkboxDiv
+                    
                     checkboxesContainer.appendChild(checkboxDiv);
+                    console.log(`Created checkbox for: ${metric}, label text: ${label.textContent}`); // New log
                 });
                 metricSelectionArea.appendChild(div);
             };
@@ -992,15 +1048,8 @@
             updateProfile(selectedPlayer);
             
             // Re-calculate all relevant analytics for the detailed table and AI insight
-            const allRelevantMetricsForAnalytics = new Set();
-            for (const category in DETAILED_METRIC_CATEGORIES) {
-                DETAILED_METRIC_CATEGORIES[category].forEach(metric => {
-                    if (typeof selectedPlayer[metric] === 'number' && !isNaN(selectedPlayer[metric])) {
-                        allRelevantMetricsForAnalytics.add(metric);
-                    }
-                });
-            }
-            currentAnalytics = calculateAnalytics(selectedPlayer.Player_ID, Array.from(allRelevantMetricsForAnalytics));
+            // Use allAvailableMetrics to ensure comprehensive analysis
+            currentAnalytics = calculateAnalytics(selectedPlayer.Player_ID, allAvailableMetrics);
             updateMetricsTable(currentAnalytics, selectedPlayer.Player_Name);
 
             // Re-populate metric selection UI based on the new player
@@ -1033,59 +1082,47 @@
             let chartDescription = '';
             let chartDataValid = true;
 
-            // Create chart wrapper div
-            const chartWrapper = document.createElement('div');
-            chartWrapper.id = `chart-wrapper-${chartId}`;
-            chartWrapper.classList.add('bg-mint-cream', 'p-6', 'rounded-xl', 'shadow-md', 'mb-8', 'border', 'border-oxford-blue-light');
-            
+            // Store the configuration for this specific chart instance
+            const chartConfig = {
+                type: selectedChartType,
+                metrics: {}, // This will hold the specific metrics for this chart
+                player: selectedPlayerName // Store the player name for this chart
+            };
+
             // Determine chart title and description based on selectedChartType
             switch (selectedChartType) {
                 case 'radar':
-                    chartTitle = 'Performance Profile (Radar Chart)';
-                    chartDescription = "Player's percentile rank vs peers in the same position (per 90 minutes).";
                     const radarMetrics = Array.from(document.querySelectorAll('#radar-checkboxes input[name="radar-metric"]:checked')).map(cb => cb.value);
                     if (radarMetrics.length === 0) chartDataValid = false;
-                    configuredRadarMetrics = new Set(radarMetrics); // Save configuration
+                    chartConfig.metrics.radar = radarMetrics;
                     break;
                 case 'bar':
-                    chartTitle = 'Metric Comparison (Bar Chart)';
-                    chartDescription = "Player's raw metric values (per 90 minutes) compared to the average of their peer group.";
                     const barMetrics = Array.from(document.querySelectorAll('#bar-checkboxes input[name="bar-metric"]:checked')).map(cb => cb.value);
                     if (barMetrics.length === 0) chartDataValid = false;
-                    configuredBarMetrics = new Set(barMetrics); // Save configuration
+                    chartConfig.metrics.bar = barMetrics;
                     break;
                 case 'horizontalBar':
-                    chartTitle = 'Single Metric Comparison (Horizontal Bar Chart)';
-                    chartDescription = "Player's value vs. peer average for a selected metric.";
-                    configuredHorizontalBarMetric = document.getElementById('horizontal-bar-metric').value;
-                    if (!configuredHorizontalBarMetric) chartDataValid = false;
+                    chartConfig.metrics.horizontalBar = document.getElementById('horizontal-bar-metric').value;
+                    if (!chartConfig.metrics.horizontalBar) chartDataValid = false;
                     break;
                 case 'doughnut':
-                    chartTitle = 'Percentile Progress (Doughnut Chart)';
-                    chartDescription = "Visualizes the player's percentile rank for a single chosen metric.";
-                    configuredDoughnutMetric = document.getElementById('doughnut-metric').value;
-                    if (!configuredDoughnutMetric) chartDataValid = false;
+                    chartConfig.metrics.doughnut = document.getElementById('doughnut-metric').value;
+                    if (!chartConfig.metrics.doughnut) chartDataValid = false;
                     break;
                 case 'bubble':
-                    chartTitle = 'Three-Metric Comparison (Bubble Chart)';
-                    chartDescription = "Compares players based on two metrics (X, Y) with a third metric influencing bubble size.";
-                    configuredBubbleXMetric = document.getElementById('bubble-x-metric').value;
-                    configuredBubbleYMetric = document.getElementById('bubble-y-metric').value;
-                    configuredBubbleSizeMetric = document.getElementById('bubble-size-metric').value;
-                    if (!configuredBubbleXMetric || !configuredBubbleYMetric || !configuredBubbleSizeMetric) chartDataValid = false;
+                    chartConfig.metrics.bubbleX = document.getElementById('bubble-x-metric').value;
+                    chartConfig.metrics.bubbleY = document.getElementById('bubble-y-metric').value;
+                    chartConfig.metrics.bubbleSize = document.getElementById('bubble-size-metric').value;
+                    if (!chartConfig.metrics.bubbleX || !chartConfig.metrics.bubbleY || !chartConfig.metrics.bubbleSize) chartDataValid = false;
                     break;
                 case 'polarArea':
-                    chartTitle = 'Metric Magnitudes (Polar Area Chart)';
-                    chartDescription = "Displays the magnitude of multiple selected metrics for the player.";
                     const polarAreaMetrics = Array.from(document.querySelectorAll('#polar-area-checkboxes input[name="polar-area-metric"]:checked')).map(cb => cb.value);
                     if (polarAreaMetrics.length === 0) chartDataValid = false;
-                    configuredPolarAreaMetrics = new Set(polarAreaMetrics); // Save configuration
+                    chartConfig.metrics.polarArea = polarAreaMetrics;
                     break;
                 case 'line':
-                    chartTitle = 'Metric Distribution (Line Chart)';
-                    chartDescription = "Shows the values of a single metric across all players in the dataset.";
-                    configuredLineMetric = document.getElementById('line-metric').value;
-                    if (!configuredLineMetric) chartDataValid = false;
+                    chartConfig.metrics.line = document.getElementById('line-metric').value;
+                    if (!chartConfig.metrics.line) chartDataValid = false;
                     break;
                 default:
                     chartDataValid = false;
@@ -1101,6 +1138,11 @@
                 return;
             }
 
+            // Create chart wrapper div
+            const chartWrapper = document.createElement('div');
+            chartWrapper.id = `chart-wrapper-${chartId}`;
+            chartWrapper.classList.add('bg-mint-cream', 'p-6', 'rounded-xl', 'shadow-md', 'mb-8', 'border', 'border-oxford-blue-light');
+            
             chartWrapper.innerHTML = `
                 <h3 class="text-xl font-bold text-oxford-blue mb-2">${chartTitle}</h3>
                 <p class="text-sm text-oxford-blue-medium mb-4">${chartDescription}</p>
@@ -1118,30 +1160,34 @@
 
             switch (selectedChartType) {
                 case 'radar':
-                    newChartInstance = createRadarChart(ctx, calculateAnalytics(selectedPlayer.Player_ID, Array.from(configuredRadarMetrics)), selectedPlayer.Player_Name);
+                    newChartInstance = createRadarChart(ctx, calculateAnalytics(selectedPlayer.Player_ID, chartConfig.metrics.radar), selectedPlayer.Player_Name);
                     break;
                 case 'bar':
-                    newChartInstance = createBarChart(ctx, calculateAnalytics(selectedPlayer.Player_ID, Array.from(configuredBarMetrics)), selectedPlayer.Player_Name);
+                    newChartInstance = createBarChart(ctx, calculateAnalytics(selectedPlayer.Player_ID, chartConfig.metrics.bar), selectedPlayer.Player_Name);
                     break;
                 case 'horizontalBar':
-                    newChartInstance = createHorizontalBarChart(ctx, selectedPlayer.Player_ID, configuredHorizontalBarMetric);
+                    // Changed type to 'bar' with indexAxis: 'y'
+                    newChartInstance = createHorizontalBarChart(ctx, selectedPlayer.Player_ID, chartConfig.metrics.horizontalBar);
                     break;
                 case 'doughnut':
-                    newChartInstance = createDoughnutChart(ctx, selectedPlayer.Player_ID, configuredDoughnutMetric);
+                    newChartInstance = createDoughnutChart(ctx, selectedPlayer.Player_ID, chartConfig.metrics.doughnut);
                     break;
                 case 'bubble':
-                    newChartInstance = createBubbleChart(ctx, selectedPlayer.Player_ID, configuredBubbleXMetric, configuredBubbleYMetric, configuredBubbleSizeMetric);
+                    newChartInstance = createBubbleChart(ctx, selectedPlayer.Player_ID, chartConfig.metrics.bubbleX, chartConfig.metrics.bubbleY, chartConfig.metrics.bubbleSize);
                     break;
                 case 'polarArea':
-                    newChartInstance = createPolarAreaChart(ctx, calculateAnalytics(selectedPlayer.Player_ID, Array.from(configuredPolarAreaMetrics)), selectedPlayer.Player_Name);
+                    newChartInstance = createPolarAreaChart(ctx, calculateAnalytics(selectedPlayer.Player_ID, chartConfig.metrics.polarArea), selectedPlayer.Player_Name);
                     break;
                 case 'line':
-                    newChartInstance = createLineChart(ctx, selectedPlayer.Player_ID, configuredLineMetric);
+                    newChartInstance = createLineChart(ctx, selectedPlayer.Player_ID, chartConfig.metrics.line);
                     break;
             }
 
             if (newChartInstance) {
-                activeCharts[chartId] = newChartInstance;
+                activeCharts[chartId] = {
+                    instance: newChartInstance,
+                    config: chartConfig // Store the config here
+                };
                 // Attach event listeners to the new buttons
                 chartWrapper.querySelector('.export-chart-btn').addEventListener('click', exportChartAsPng);
                 chartWrapper.querySelector('.remove-chart-btn').addEventListener('click', (event) => removeChartFromDashboard(event.target.dataset.chartId));
@@ -1152,7 +1198,7 @@
 
         function removeChartFromDashboard(chartId) {
             if (activeCharts[chartId]) {
-                activeCharts[chartId].destroy();
+                activeCharts[chartId].instance.destroy();
                 delete activeCharts[chartId];
             }
             const chartWrapper = document.getElementById(`chart-wrapper-${chartId}`);
@@ -1174,11 +1220,16 @@
             document.getElementById('profile-age').textContent = player.Age || 'N/A';
         }
 
+        // Dynamically identifies and categorizes metrics from the dataset
         function identifyAndCategorizeMetrics(data) {
             if (data.length === 0) return {};
 
             const categories = {
-                'Physical': [], 'Technical': [], 'Tactical': [], 'Mental_Discipline': [], 'General': []
+                'Physical': [],
+                'Technical': [],
+                'Tactical': [],
+                'Mental_Discipline': [],
+                'General': []
             };
 
             let allHeaders = new Set();
@@ -1188,45 +1239,39 @@
             allHeaders = Array.from(allHeaders);
 
             allHeaders.forEach(header => {
+                // Check if the header has meaningful numeric data across the dataset
                 const hasMeaningfulNumericData = data.some(row => 
                     typeof row[header] === 'number' && !isNaN(row[header]) && row[header] !== 0
                 );
+
                 if (hasMeaningfulNumericData) {
                     let assigned = false;
-                    for (const categoryName in DETAILED_METRIC_CATEGORIES) {
-                        if (DETAILED_METRIC_CATEGORIES[categoryName].includes(header)) {
-                            categories[categoryName].push(header);
+                    const lowerHeader = header.toLowerCase();
+
+                    // Check against predefined keywords for categorization
+                    for (const category in METRIC_KEYWORDS) {
+                        if (METRIC_KEYWORDS[category].some(keyword => lowerHeader.includes(keyword.toLowerCase()))) {
+                            switch (category) {
+                                case 'offensive':
+                                case 'passing':
+                                case 'goalkeeping':
+                                    categories['Technical'].push(header);
+                                    break;
+                                case 'defensive':
+                                    categories['Tactical'].push(header);
+                                    break;
+                                case 'physical':
+                                    categories['Physical'].push(header);
+                                    break;
+                                case 'mental':
+                                    categories['Mental_Discipline'].push(header);
+                                    break;
+                                case 'financial':
+                                    categories['General'].push(header); // Financial metrics often go to general
+                                    break;
+                            }
                             assigned = true;
                             break;
-                        }
-                    }
-
-                    if (!assigned) {
-                        const lowerHeader = header.toLowerCase();
-                        for (const category in METRIC_KEYWORDS) {
-                            if (METRIC_KEYWORDS[category].some(keyword => lowerHeader.includes(keyword))) {
-                                switch (category) {
-                                    case 'offensive':
-                                    case 'passing':
-                                    case 'goalkeeping':
-                                        categories['Technical'].push(header);
-                                        break;
-                                    case 'defensive':
-                                        categories['Tactical'].push(header);
-                                        break;
-                                    case 'physical':
-                                        categories['Physical'].push(header);
-                                        break;
-                                    case 'mental':
-                                        categories['Mental_Discipline'].push(header);
-                                        break;
-                                    case 'financial':
-                                        categories['General'].push(header);
-                                        break;
-                                }
-                                assigned = true;
-                                break;
-                            }
                         }
                     }
                     
@@ -1236,15 +1281,17 @@
                 }
             });
 
+            // Remove duplicates and sort metrics within each category
             for (const category in categories) {
                 categories[category] = Array.from(new Set(categories[category])).sort();
             }
+            console.log("Dynamically identified metric categories:", categories);
             return categories;
         }
 
         function getRelevantMetricsForPlayer(player, allPlayerData, chartType) {
             const playerPosition = player.Position;
-            const availableMetricsByCategory = identifyAndCategorizeMetrics(allPlayerData);
+            const availableMetricsByCategory = dynamicMetricCategories; // Use the dynamically populated categories
             
             let metricsSet = new Set(); 
 
@@ -1256,7 +1303,7 @@
 
             const preferredCategories = POSITION_TO_CATEGORIES[playerPosition] || ['General'];
 
-            const playerAnalytics = calculateAnalytics(player.Player_ID, allAvailableMetrics);
+            const playerAnalytics = calculateAnalytics(player.Player_ID, allAvailableMetrics); // Ensure analytics are calculated for all available metrics
 
             const addIfValidAndNonZeroAverage = (set, metric) => {
                 const data = playerAnalytics[metric];
@@ -1320,7 +1367,7 @@
         }
 
         function calculateAnalytics(selectedPlayerId, metricsList) {
-            console.log("Calculating analytics for player ID:", selectedPlayerId, "with metrics:", metricsList);
+            console.log("Calculating analytics for player ID:", selectedPlayerId, "with metrics:", metricsList.length, "total metrics.");
             const player = playerData.find(p => p.Player_ID == selectedPlayerId);
             if (!player) {
                 console.warn("Player not found for analytics calculation:", selectedPlayerId);
@@ -1329,19 +1376,20 @@
 
             const position = player.Position;
             
+            // Read current filter values from DOM
             const minAge = parseInt(document.getElementById('min-age-filter').value) || 15;
             const maxAge = parseInt(document.getElementById('max-age-filter').value) || 45;
             const minMinutes = parseInt(document.getElementById('min-minutes-filter').value) || 0;
 
             let peerGroup = playerData.filter(p => 
                 p.Player_ID != selectedPlayerId &&
-                p.Season === player.Season &&
                 (p.Age === 'N/A' || (p.Age >= minAge && p.Age <= maxAge)) &&
                 p.Minutes_Played >= minMinutes
             );
 
             let initialPeerGroupSize = peerGroup.length;
 
+            // Refine peer group by position, then nationality, then team if initial is too small
             let filteredPeerGroup = peerGroup.filter(p => p.Position === player.Position);
             if (filteredPeerGroup.length < 5 && initialPeerGroupSize >= 5) {
                 filteredPeerGroup = peerGroup.filter(p => p.Nationality === player.Nationality);
@@ -1349,11 +1397,11 @@
             if (filteredPeerGroup.length < 5 && initialPeerGroupSize >= 5) {
                 filteredPeerGroup = peerGroup.filter(p => p.Team === player.Team);
             }
-            if (filteredPeerGroup.length < 5) {
+            if (filteredPeerGroup.length < 5) { // If still too small, use the broader filtered group
                 filteredPeerGroup = peerGroup;
             }
             peerGroup = filteredPeerGroup;
-            console.log("Peer group size:", peerGroup.length);
+            console.log("Peer group size after filters:", peerGroup.length);
 
             const results = {};
 
@@ -1366,68 +1414,69 @@
                     average = peerValues.reduce((a, b) => a + b, 0) / peerValues.length;
                 }
 
-                if (average === 0 && peerValues.every(val => val === 0)) {
-                    // console.log(`Skipping metric ${metric} as all peer values are zero.`);
-                    return;
-                }
+                // Only include metrics where player has a value and there's a meaningful average in the peer group
+                if (typeof playerValue === 'number' && !isNaN(playerValue) && typeof average === 'number' && average !== 0) {
+                    let percentile = 0;
+                    if (peerValues.length > 0) {
+                        const sortedPeers = [...peerValues].sort((a, b) => a - b);
+                        const rank = sortedPeers.filter(v => v < playerValue).length;
+                        percentile = (rank / sortedPeers.length) * 100;
+                    }
+                    
+                    if (LOWER_IS_BETTER_METRICS.includes(metric)) {
+                        percentile = 100 - percentile; // Invert percentile for "lower is better" metrics
+                    }
 
-                let percentile = 0;
-                if (peerValues.length > 0 && typeof playerValue === 'number' && !isNaN(playerValue)) {
-                    const sortedPeers = [...peerValues].sort((a, b) => a - b);
-                    const rank = sortedPeers.filter(v => v < playerValue).length;
-                    percentile = (rank / sortedPeers.length) * 100;
+                    results[metric] = {
+                        playerValue: playerValue,
+                        average: average,
+                        percentile: percentile
+                    };
+                } else {
+                    // console.log(`Skipping metric ${metric} for analytics due to invalid player value or zero peer average.`);
                 }
-                
-                if (LOWER_IS_BETTER_METRICS.includes(metric)) {
-                    percentile = 100 - percentile;
-                }
-
-                results[metric] = {
-                    playerValue: playerValue,
-                    average: average,
-                    percentile: percentile
-                };
             });
-            console.log("Analytics results:", results);
+            console.log("Analytics results (meaningful metrics only):", Object.keys(results).length, "metrics.");
             return results;
         }
 
         function updateMetricsTable(analyticsData, playerName) {
-            console.log("Updating metrics table for:", playerName, "with analytics data:", analyticsData);
+            console.log("Updating metrics table for:", playerName, "with analytics data:", Object.keys(analyticsData).length, "metrics.");
             const categorizedMetricsContent = document.getElementById('categorized-metrics-table-container');
             categorizedMetricsContent.innerHTML = '';
 
             const strengths = [];
             const areasForDevelopment = [];
-            const allCategorizedMetricsInTable = new Set();
+            const allCategorizedMetricsInTable = new Set(); // To track metrics already displayed in Strengths/Weaknesses
 
+            // First, identify strengths and weaknesses based on thresholds
             for (const metric in analyticsData) {
                 const data = analyticsData[metric];
-                if (typeof data.playerValue === 'number' && !isNaN(data.playerValue) && typeof data.average === 'number' && data.average !== 0) {
-                    if (typeof data.percentile === 'number' && !isNaN(data.percentile)) {
-                        if (data.percentile >= goodPerformanceThreshold) {
-                            strengths.push({ metric, ...data });
-                            allCategorizedMetricsInTable.add(metric);
-                        } else if (data.percentile <= poorPerformanceThreshold) {
-                            areasForDevelopment.push({ metric, ...data });
-                            allCategorizedMetricsInTable.add(metric);
-                        }
+                if (typeof data.percentile === 'number' && !isNaN(data.percentile)) {
+                    if (data.percentile >= goodPerformanceThreshold) {
+                        strengths.push({ metric, ...data });
+                        allCategorizedMetricsInTable.add(metric);
+                    } else if (data.percentile <= poorPerformanceThreshold) {
+                        areasForDevelopment.push({ metric, ...data });
+                        allCategorizedMetricsInTable.add(metric);
                     }
                 }
             }
 
-            strengths.sort((a, b) => b.percentile - a.percentile);
-            areasForDevelopment.sort((a, b) => a.percentile - b.percentile);
+            strengths.sort((a, b) => b.percentile - a.percentile); // Sort by percentile, highest first
+            areasForDevelopment.sort((a, b) => a.percentile - b.percentile); // Sort by percentile, lowest first
 
-            const generateCategoryHtml = (categoryName, metricsArray, isExpanded = false) => {
-                const id = categoryName.toLowerCase().replace(/\s/g, '-') + '-metrics-table';
+            const generateCategoryHtml = (categoryTitle, metricsArray, isExpanded = false) => {
+                if (metricsArray.length === 0) return ''; // Don't generate empty categories
+
+                const id = categoryTitle.toLowerCase().replace(/\s/g, '-') + '-metrics-table';
                 const expandedClass = isExpanded ? 'expanded' : ''; 
                 const arrowClass = isExpanded ? 'expanded' : '';
 
                 let html = `
                     <div class="mb-4 bg-mint-cream-dark rounded-lg shadow-sm overflow-hidden">
                         <div class="collapsible-header bg-oxford-blue-light hover:bg-oxford-blue-dark p-4 font-semibold text-lg text-mint-cream flex justify-between items-center rounded-md ${expandedClass}" data-target="#${id}">
-                            <span>${categoryName}</span>
+                            <span>${escapeHtml(categoryTitle)}</span>
                             <span class="arrow">▼</span>
                         </div>
                         <div id="${id}" class="collapsible-content p-4 ${expandedClass}">
@@ -1444,18 +1493,17 @@
                                     <tbody class="bg-mint-cream divide-y divide-oxford-blue-light">
                 `;
                 
-                let hasMetrics = false;
                 metricsArray.forEach(item => {
                     let rowClass = '';
                     if (item.percentile >= goodPerformanceThreshold) {
-                        rowClass = 'bg-green-50';
+                        rowClass = 'bg-green-50'; // Tailwind green for good
                     } else if (item.percentile <= poorPerformanceThreshold) {
-                        rowClass = 'bg-red-50';
+                        rowClass = 'bg-red-50'; // Tailwind red for poor
                     }
 
                     html += `
                         <tr class="${rowClass}">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-oxford-blue">${item.metric.replace(/_/g, ' ')}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-oxford-blue">${escapeHtml(item.metric.replace(/_/g, ' '))}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-oxford-blue-medium">${item.playerValue.toFixed(2)}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-oxford-blue-medium">${item.average.toFixed(2)}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-oxford-blue-medium">
@@ -1468,7 +1516,6 @@
                             </td>
                         </tr>
                     `;
-                    hasMetrics = true;
                 });
 
                 html += `
@@ -1478,24 +1525,21 @@
                 </div>
             </div>
         `;
-        return hasMetrics ? html : '';
+        return html;
             };
 
-            if (strengths.length > 0) {
-                categorizedMetricsContent.insertAdjacentHTML('beforeend', generateCategoryHtml('Strengths', strengths, true));
-            }
+            // Add Strengths and Areas for Development first
+            categorizedMetricsContent.insertAdjacentHTML('beforeend', generateCategoryHtml('Strengths', strengths, true));
+            categorizedMetricsContent.insertAdjacentHTML('beforeend', generateCategoryHtml('Areas for Development', areasForDevelopment));
 
-            if (areasForDevelopment.length > 0) {
-                categorizedMetricsContent.insertAdjacentHTML('beforeend', generateCategoryHtml('Areas for Development', areasForDevelopment));
-            }
-
-            for (const categoryName in DETAILED_METRIC_CATEGORIES) {
-                const metricsInThisCategory = DETAILED_METRIC_CATEGORIES[categoryName]
+            // Add other categories, filtering out metrics already listed as strengths/weaknesses
+            for (const categoryName in dynamicMetricCategories) {
+                const metricsInThisCategory = dynamicMetricCategories[categoryName]
                     .filter(metric => {
                         const data = analyticsData[metric];
-                        return !allCategorizedMetricsInTable.has(metric) && 
+                        return !allCategorizedMetricsInTable.has(metric) && // Ensure not already in strengths/weaknesses
                                typeof data?.playerValue === 'number' && !isNaN(data.playerValue) &&
-                               typeof data?.average === 'number' && data.average !== 0;
+                               typeof data?.average === 'number' && data.average !== 0; // Ensure meaningful data
                     })
                     .map(metric => ({ metric, ...analyticsData[metric] }))
                     .sort((a, b) => a.metric.localeCompare(b.metric));
@@ -1580,15 +1624,17 @@
                             fileStatus.textContent = `Processed ${filesProcessedCount}/${files.length} files.`;
                             resolve();
                         } catch (error) {
-                            console.error(`Error processing file ${file.name}:`, error);
-                            fileStatus.textContent = `Error processing ${file.name}: ${error.message}`;
+                            console.error(`Error processing file ${escapeJsTemplateLiteral(file.name)}:`, error);
+                            // Apply escapeHtml to error.message and file.name
+                            fileStatus.textContent = `Error processing ${escapeHtml(file.name)}: ${escapeHtml(error.message)}`;
                             reject(error);
                         }
                     };
 
                     reader.onerror = function() {
-                        console.error(`FileReader error for ${file.name}:`, reader.error);
-                        fileStatus.textContent = `Error reading file ${file.name}: ${reader.error}`;
+                        console.error(`FileReader error for ${escapeJsTemplateLiteral(file.name)}:`, reader.error);
+                        // Apply escapeHtml to file.name and reader.error.message
+                        fileStatus.textContent = `Error reading file ${escapeHtml(file.name)}: ${escapeHtml(reader.error ? reader.error.message : 'Unknown error')}`;
                         reject(reader.error);
                     };
 
@@ -1624,6 +1670,9 @@
                     if (!aIsPer90 && bIsPer90) return 1;
                     return a.localeCompare(b);
                 });
+
+                // Dynamically categorize all metrics
+                dynamicMetricCategories = identifyAndCategorizeMetrics(playerData);
 
                 populatePlayerSelect(playerData);
                 populateComparisonSelects(playerData);
@@ -1703,7 +1752,7 @@
             const selectedPlayerName = event.target.value;
             console.log("Player selected:", selectedPlayerName);
             if (selectedPlayerName) {
-                // Reset configured metric selections when a new player is selected
+                // Reset configured metric selections for the UI, but not for active charts
                 configuredRadarMetrics = new Set();
                 configuredBarMetrics = new Set();
                 configuredHorizontalBarMetric = '';
@@ -1713,10 +1762,122 @@
                 configuredBubbleSizeMetric = '';
                 configuredPolarAreaMetrics = new Set();
                 configuredLineMetric = '';
-                
-                // Re-populate the metric selection UI based on the current chart type and new player
-                populateMetricSelectionUI(selectedChartType);
+
+                // Update profile and detailed metrics table for the new player
                 updateDashboard(selectedPlayerName);
+                populateMetricSelectionUI(selectedChartType); // This will populate the UI based on default/empty configured metrics for the *new* player.
+
+                // Re-render all active charts for the newly selected player
+                const chartsToRecreate = [];
+                for (const chartId in activeCharts) {
+                    if (activeCharts[chartId] && activeCharts[chartId].instance) {
+                        // Store the configuration of the existing chart
+                        chartsToRecreate.push({
+                            id: chartId,
+                            config: activeCharts[chartId].config // Get the stored config
+                        });
+                        // Destroy the old chart instance
+                        activeCharts[chartId].instance.destroy();
+                    }
+                }
+                activeCharts = {}; // Clear the activeCharts object
+
+                // Clear the chart display area to re-add them
+                const activeChartsDisplayArea = document.getElementById('active-charts-display-area');
+                activeChartsDisplayArea.innerHTML = '<p id="no-charts-message" class="text-center text-oxford-blue-medium mt-4">Add charts using the "Customize Charts" section above.</p>';
+                if (chartsToRecreate.length > 0) {
+                    document.getElementById('selected-visualizations-section').classList.remove('hidden');
+                    document.getElementById('no-charts-message').classList.add('hidden');
+                } else {
+                    document.getElementById('selected-visualizations-section').classList.add('hidden');
+                    document.getElementById('no-charts-message').classList.remove('hidden');
+                }
+
+
+                chartsToRecreate.forEach(chartData => {
+                    const chartId = chartData.id;
+                    const chartConfig = chartData.config;
+                    const chartType = chartConfig.type; // Get the original chart type
+
+                    // Create a new canvas element for the chart
+                    const chartWrapper = document.createElement('div');
+                    chartWrapper.id = `chart-wrapper-${chartId}`;
+                    chartWrapper.classList.add('bg-mint-cream', 'p-6', 'rounded-xl', 'shadow-md', 'mb-8', 'border', 'border-oxford-blue-light');
+
+                    let chartTitle = '';
+                    let chartDescription = '';
+                    let newChartOptions = null; // Will store the Chart.js options object
+
+                    // Re-determine chart title and description based on stored type
+                    const selectedPlayerForChart = playerData.find(p => p.Player_Name === selectedPlayerName);
+                    if (!selectedPlayerForChart) {
+                        console.error(`Player ${selectedPlayerName} not found for re-creating chart ${chartId}.`);
+                        return; // Skip this chart if player data is missing
+                    }
+
+                    switch (chartType) {
+                        case 'radar':
+                            chartTitle = 'Performance Profile (Radar Chart)';
+                            chartDescription = "Player's percentile rank vs peers in the same position (per 90 minutes).";
+                            newChartOptions = createRadarChart(null, calculateAnalytics(selectedPlayerForChart.Player_ID, chartConfig.metrics.radar), selectedPlayerForChart.Player_Name);
+                            break;
+                        case 'bar':
+                            chartTitle = 'Metric Comparison (Bar Chart)';
+                            chartDescription = "Player's raw metric values (per 90 minutes) compared to the average of their peer group.";
+                            newChartOptions = createBarChart(null, calculateAnalytics(selectedPlayerForChart.Player_ID, chartConfig.metrics.bar), selectedPlayerForChart.Player_Name);
+                            break;
+                        case 'horizontalBar':
+                            chartTitle = 'Single Metric Comparison (Horizontal Bar Chart)';
+                            chartDescription = "Player's value vs. peer average for a selected metric.";
+                            newChartOptions = createHorizontalBarChart(null, selectedPlayerForChart.Player_ID, chartConfig.metrics.horizontalBar);
+                            break;
+                        case 'doughnut':
+                            chartTitle = 'Percentile Progress (Doughnut Chart)';
+                            chartDescription = "Visualizes the player's percentile rank for a single chosen metric.";
+                            newChartOptions = createDoughnutChart(null, selectedPlayerForChart.Player_ID, chartConfig.metrics.doughnut);
+                            break;
+                        case 'bubble':
+                            chartTitle = 'Three-Metric Comparison (Bubble Chart)';
+                            chartDescription = "Compares players based on two metrics (X, Y) with a third metric influencing bubble size.";
+                            newChartOptions = createBubbleChart(null, selectedPlayerForChart.Player_ID, chartConfig.metrics.bubbleX, chartConfig.metrics.bubbleY, chartConfig.metrics.bubbleSize);
+                            break;
+                        case 'polarArea':
+                            chartTitle = 'Metric Magnitudes (Polar Area Chart)';
+                            chartDescription = "Displays the magnitude of multiple selected metrics for the player.";
+                            newChartOptions = createPolarAreaChart(null, calculateAnalytics(selectedPlayerForChart.Player_ID, chartConfig.metrics.polarArea), selectedPlayerForChart.Player_Name);
+                            break;
+                        case 'line':
+                            chartTitle = 'Metric Distribution (Line Chart)';
+                            chartDescription = "Shows the values of a single metric across all players in the dataset.";
+                            newChartOptions = createLineChart(null, selectedPlayerForChart.Player_ID, chartConfig.metrics.line);
+                            break;
+                    }
+
+                    chartWrapper.innerHTML = `
+                        <h3 class="text-xl font-bold text-oxford-blue mb-2">${chartTitle}</h3>
+                        <p class="text-sm text-oxford-blue-medium mb-4">${chartDescription}</p>
+                        <div class="chart-container"><canvas id="${chartId}"></canvas></div>
+                        <p id="message-${chartId}" class="text-center text-oxford-blue-medium mt-4 hidden">No data to display this chart.</p>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <button class="bg-oxford-blue-light hover:bg-oxford-blue-dark text-mint-cream font-bold py-2 px-4 rounded-full text-sm export-chart-btn" data-chart-id="${chartId}">Export Chart as PNG</button>
+                            <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full text-sm remove-chart-btn" data-chart-id="${chartId}">Remove Chart</button>
+                        </div>
+                    `;
+                    activeChartsDisplayArea.appendChild(chartWrapper);
+
+                    const ctx = document.getElementById(chartId).getContext('2d');
+                    if (newChartOptions) { // newChartOptions will be the Chart.js instance if valid data
+                        activeCharts[chartId] = {
+                            instance: newChartOptions, // Store the new Chart.js instance
+                            config: chartConfig // Re-store the original config
+                        };
+                        // Attach event listeners to the new buttons
+                        chartWrapper.querySelector('.export-chart-btn').addEventListener('click', exportChartAsPng);
+                        chartWrapper.querySelector('.remove-chart-btn').addEventListener('click', (event) => removeChartFromDashboard(event.target.dataset.chartId));
+                    } else {
+                        document.getElementById(`message-${chartId}`).classList.remove('hidden');
+                    }
+                });
             }
         }
 
@@ -1729,7 +1890,7 @@
                 return null;
             }
 
-            return new Chart(ctx, {
+            const chartConfig = {
                 type: 'radar',
                 data: {
                     labels: labels,
@@ -1783,7 +1944,8 @@
                         }
                     }
                 }
-            });
+            };
+            return ctx ? new Chart(ctx, chartConfig) : chartConfig; // Return instance if ctx provided, else config
         }
 
         // Function to create or update Bar Chart
@@ -1796,7 +1958,7 @@
                 return null;
             }
 
-            return new Chart(ctx, {
+            const chartConfig = {
                 type: 'bar',
                 data: {
                     labels: labels,
@@ -1848,7 +2010,8 @@
                         }
                     }
                 }
-            });
+            };
+            return ctx ? new Chart(ctx, chartConfig) : chartConfig;
         }
 
         // Function to create or update Horizontal Bar Chart
@@ -1866,10 +2029,10 @@
                 return null;
             }
 
-            return new Chart(ctx, {
-                type: 'bar',
+            const chartConfig = {
+                type: 'bar', // Changed from 'horizontalBar'
                 data: {
-                    labels: [metric.replace(/_/g, ' ')],
+                    labels: [escapeHtml(metric.replace(/_/g, ' '))], // Escaping here
                     datasets: [
                         {
                             label: selectedPlayer.Player_Name,
@@ -1907,7 +2070,8 @@
                         tooltip: { enabled: false, external: externalTooltipHandler }
                     }
                 }
-            });
+            };
+            return ctx ? new Chart(ctx, chartConfig) : chartConfig;
         }
 
         // Function to create or update Doughnut Chart
@@ -1924,10 +2088,10 @@
                 return null;
             }
 
-            return new Chart(ctx, {
+            const chartConfig = {
                 type: 'doughnut',
                 data: {
-                    labels: [`${metric.replace(/_/g, ' ')} Percentile`, 'Remaining'],
+                    labels: [escapeHtml(`${metric.replace(/_/g, ' ')} Percentile`), 'Remaining'], // Escaping here
                     datasets: [{
                         data: [percentile, 100 - percentile],
                         backgroundColor: ['rgba(237, 37, 78, 0.8)', 'rgba(1, 25, 54, 0.8)'], /* Hot Pink, Oxford Blue */
@@ -1944,7 +2108,8 @@
                         tooltip: { enabled: false, external: externalTooltipHandler }
                     }
                 }
-            });
+            };
+            return ctx ? new Chart(ctx, chartConfig) : chartConfig;
         }
 
         // Function to create or update Bubble Chart
@@ -2001,7 +2166,7 @@
                 });
             }
 
-            return new Chart(ctx, {
+            const chartConfig = {
                 type: 'bubble',
                 data: { datasets: datasets },
                 options: {
@@ -2009,12 +2174,12 @@
                     maintainAspectRatio: false,
                     scales: {
                         x: {
-                            title: { display: true, text: metricX.replace(/_/g, ' '), color: '#011936' }, /* Oxford Blue */
+                            title: { display: true, text: escapeHtml(metricX.replace(/_/g, ' ')), color: '#011936' }, // Escaping here
                             grid: { color: '#1a3350' }, /* Lighter Oxford Blue */
                             ticks: { color: '#011936' } /* Oxford Blue */
                         },
                         y: {
-                            title: { display: true, text: metricY.replace(/_/g, ' '), color: '#011936' }, /* Oxford Blue */
+                            title: { display: true, text: escapeHtml(metricY.replace(/_/g, ' ')), color: '#011936' }, // Escaping here
                             grid: { color: '#1a3350' }, /* Lighter Oxford Blue */
                             ticks: { color: '#011936' } /* Oxford Blue */
                         }
@@ -2024,7 +2189,8 @@
                         tooltip: { enabled: false, external: externalTooltipHandler }
                     }
                 }
-            });
+            };
+            return ctx ? new Chart(ctx, chartConfig) : chartConfig;
         }
 
         // Function to create or update Polar Area Chart
@@ -2049,10 +2215,10 @@
                 return `hsla(${hue}, 80%, 40%, 1)`;
             });
 
-            return new Chart(ctx, {
+            const chartConfig = {
                 type: 'polarArea',
                 data: {
-                    labels: labels,
+                    labels: labels.map(label => escapeHtml(label)), // Escaping here
                     datasets: [{
                         label: playerName,
                         data: data,
@@ -2076,7 +2242,8 @@
                         tooltip: { enabled: false, external: externalTooltipHandler }
                     }
                 }
-            });
+            };
+            return ctx ? new Chart(ctx, chartConfig) : chartConfig;
         }
 
         // Function to create or update Line Chart
@@ -2095,19 +2262,19 @@
             // Sort data points by metric value for better visualization of distribution
             dataPoints.sort((a, b) => a.y - b.y);
 
-            const labels = dataPoints.map(p => p.x);
+            const labels = dataPoints.map(p => escapeHtml(p.x)); // Escaping here
             const data = dataPoints.map(p => p.y);
             const pointBackgroundColors = dataPoints.map(p => p.isCurrentPlayer ? 'rgba(237, 37, 78, 1)' : 'rgba(1, 25, 54, 0.6)'); /* Hot Pink, Oxford Blue */
             const pointBorderColors = dataPoints.map(p => p.isCurrentPlayer ? '#fff' : 'rgba(1, 25, 54, 1)'); /* Oxford Blue */
             const pointRadii = dataPoints.map(p => p.isCurrentPlayer ? 6 : 3);
 
 
-            return new Chart(ctx, {
+            const chartConfig = {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: `${metric.replace(/_/g, ' ')} Values`,
+                        label: escapeHtml(`${metric.replace(/_/g, ' ')} Values`), // Escaping here
                         data: data,
                         fill: false,
                         borderColor: 'rgba(237, 37, 78, 0.8)', /* Hot Pink */
@@ -2129,7 +2296,7 @@
                         },
                         y: {
                             beginAtZero: true,
-                            title: { display: true, text: metric.replace(/_/g, ' '), color: '#011936' }, /* Oxford Blue */
+                            title: { display: true, text: escapeHtml(metric.replace(/_/g, ' ')), color: '#011936' }, // Escaping here
                             grid: { color: '#1a3350' }, /* Lighter Oxford Blue */
                             ticks: { color: '#011936' } /* Oxford Blue */
                         }
@@ -2139,7 +2306,8 @@
                         tooltip: { enabled: false, external: externalTooltipHandler }
                     }
                 }
-            });
+            };
+            return ctx ? new Chart(ctx, chartConfig) : chartConfig;
         }
 
         function handlePlayerComparison() {
@@ -2186,51 +2354,8 @@
                 return;
             }
 
-            // Determine ALL common numeric metrics across selected players
-            let allCommonNumericMetrics = new Set();
-            if (selectedPlayersData.length > 0) {
-                Object.keys(selectedPlayersData[0]).forEach(key => {
-                    const isCommonAndNumeric = selectedPlayersData.every(player => 
-                        typeof player[key] === 'number' && !isNaN(player[key])
-                    );
-                    if (isCommonAndNumeric) {
-                        allCommonNumericMetrics.add(key);
-                    }
-                });
-            }
-            allCommonNumericMetrics = Array.from(allCommonNumericMetrics).sort();
-            console.log("All common numeric metrics:", allCommonNumericMetrics);
-
-
-            // Categorize these common metrics for display
-            const categorizedComparisonMetrics = {
-                'Physical': [],
-                'Technical': [],
-                'Tactical': [],
-                'Mental_Discipline': [],
-                'General': [] // For metrics that don't fit specific categories
-            };
-
-            allCommonNumericMetrics.forEach(metric => {
-                let assignedToCategory = false;
-                for (const categoryName in DETAILED_METRIC_CATEGORIES) {
-                    if (DETAILED_METRIC_CATEGORIES[categoryName].includes(metric)) {
-                        categorizedComparisonMetrics[categoryName].push(metric);
-                        assignedToCategory = true;
-                        break;
-                    }
-                }
-                if (!assignedToCategory) {
-                    categorizedComparisonMetrics['General'].push(metric);
-                }
-            });
-
-            // Sort metrics within each category alphabetically
-            for (const category in categorizedComparisonMetrics) {
-                categorizedComparisonMetrics[category].sort();
-            }
-
-            console.log("Categorized common metrics for comparison (for display):", categorizedComparisonMetrics);
+            // Use the dynamically categorized metrics for comparison
+            const categorizedComparisonMetrics = dynamicMetricCategories;
 
             // Create table header
             let headerHtml = `
@@ -2239,10 +2364,13 @@
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-oxford-blue-medium uppercase tracking-wider">Metric</th>
             `;
             selectedPlayersData.forEach(player => {
-                headerHtml += `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-oxford-blue-medium uppercase tracking-wider">${player.Player_Name} (${player.Team})</th>`;
+                // Escape player name and team name for HTML safety
+                const escapedPlayerName = escapeHtml(player.Player_Name || 'N/A');
+                const escapedTeam = escapeHtml(player.Team || 'N/A');
+                headerHtml += `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-oxford-blue-medium uppercase tracking-wider">${escapedPlayerName} (${escapedTeam})</th>`;
             });
-            headerHtml += `</tr></thead>`;
-            
+            headerHtml += `</tr></thead>`; 
+
             let tableBodyHtml = `<tbody class="bg-mint-cream divide-y divide-oxford-blue-light">`;
 
             let hasAnyMetricsToDisplay = false;
@@ -2250,15 +2378,23 @@
             // Create table rows for each categorized common metric
             for (const categoryName in categorizedComparisonMetrics) {
                 const metricsInThisCategory = categorizedComparisonMetrics[categoryName];
-                if (metricsInThisCategory.length > 0) {
+                
+                // Filter metrics within this category to only include those that are numeric and non-zero for ALL selected players
+                const relevantMetricsForComparison = metricsInThisCategory.filter(metric => {
+                    return selectedPlayersData.every(player => 
+                        typeof player[metric] === 'number' && !isNaN(player[metric]) && player[metric] !== 0
+                    );
+                });
+
+                if (relevantMetricsForComparison.length > 0) {
                     hasAnyMetricsToDisplay = true;
                     tableBodyHtml += `
                         <tr class="bg-mint-cream-dark">
-                            <td colspan="${selectedPlayersData.length + 1}" class="px-6 py-3 text-left text-sm font-semibold text-oxford-blue">${categoryName.replace(/_/g, ' ')} Metrics</td>
+                            <td colspan="${selectedPlayersData.length + 1}" class="px-6 py-3 text-left text-sm font-semibold text-oxford-blue">${escapeHtml(categoryName.replace(/_/g, ' '))} Metrics</td>
                         </tr>
                     `;
-                    metricsInThisCategory.forEach(metric => {
-                        tableBodyHtml += `<tr><td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-oxford-blue">${metric.replace(/_/g, ' ')}</td>`;
+                    relevantMetricsForComparison.forEach(metric => {
+                        tableBodyHtml += `<tr><td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-oxford-blue">${escapeHtml(metric.replace(/_/g, ' '))}</td>`;
                         selectedPlayersData.forEach(player => {
                             const value = player[metric];
                             tableBodyHtml += `<td class="px-6 py-4 whitespace-nowrap text-sm text-oxford-blue-medium">${typeof value === 'number' && !isNaN(value) ? value.toFixed(2) : '-'}</td>`;
@@ -2267,7 +2403,7 @@
                     });
                 }
             }
-            tableBodyHtml += `</tbody>`;
+            tableBodyHtml += `</tbody>`; 
 
             if (!hasAnyMetricsToDisplay) {
                 comparisonMessage.textContent = 'No common numeric metrics found for the selected players to compare across the specified categories.';
@@ -2303,7 +2439,8 @@
             insightLoadingP.classList.remove('hidden');
             generateInsightBtn.disabled = true;
 
-            const playerProfile = `Player Name: ${selectedPlayer.Player_Name}\nPosition: ${selectedPlayer.Position}\nTeam: ${selectedPlayer.Team}\nNationality: ${selectedPlayer.Nationality}\nAge: ${selectedPlayer.Age}`;
+            // Apply escapeJsTemplateLiteral to player properties for safe insertion into the prompt string literal
+            const playerProfile = `Player Name: ${escapeJsTemplateLiteral(selectedPlayer.Player_Name)}\nPosition: ${escapeJsTemplateLiteral(selectedPlayer.Position)}\nTeam: ${escapeJsTemplateLiteral(selectedPlayer.Team)}\nNationality: ${escapeJsTemplateLiteral(selectedPlayer.Nationality)}\nAge: ${escapeJsTemplateLiteral(String(selectedPlayer.Age))}`;
             
             let metricsSummary = 'Key Metrics:\n';
             let strengthsSummary = 'Strengths (Top Performers):\n';
@@ -2311,20 +2448,20 @@
             let hasStrengths = false;
             let hasWeaknesses = false;
 
+            // currentAnalytics already contains analytics for allAvailableMetrics
             // Iterate through currentAnalytics to build the prompt
             for (const metric in currentAnalytics) {
                 const data = currentAnalytics[metric];
                 // Only include metrics in the LLM prompt if they have a valid numeric player value AND non-zero group average
-                if (typeof data.playerValue === 'number' && !isNaN(data.playerValue) && typeof data.average === 'number' && data.average !== 0) {
-                    metricsSummary += `- ${metric.replace(/_/g, ' ')}: Player Value: ${data.playerValue.toFixed(2)}, Group Average: ${data.average.toFixed(2)}, Percentile: ${data.percentile.toFixed(0)}%\n`;
-                    
-                    if (data.percentile >= goodPerformanceThreshold) {
-                        strengthsSummary += `  - ${metric.replace(/_/g, ' ')} (${data.percentile.toFixed(0)}% percentile)\n`;
-                        hasStrengths = true;
-                    } else if (data.percentile <= poorPerformanceThreshold) {
-                        weaknessesSummary += `  - ${metric.replace(/_/g, ' ')} (${data.percentile.toFixed(0)}% percentile)\n`;
-                        hasWeaknesses = true;
-                    }
+                // This filtering is already handled when currentAnalytics is calculated
+                metricsSummary += `- ${escapeJsTemplateLiteral(metric.replace(/_/g, ' '))}: Player Value: ${data.playerValue.toFixed(2)}, Group Average: ${data.average.toFixed(2)}, Percentile: ${data.percentile.toFixed(0)}%\n`;
+                
+                if (data.percentile >= goodPerformanceThreshold) {
+                    strengthsSummary += `  - ${escapeJsTemplateLiteral(metric.replace(/_/g, ' '))} (${data.percentile.toFixed(0)}% percentile)\n`;
+                    hasStrengths = true;
+                } else if (data.percentile <= poorPerformanceThreshold) {
+                    weaknessesSummary += `  - ${escapeJsTemplateLiteral(metric.replace(/_/g, ' '))} (${data.percentile.toFixed(0)}% percentile)\n`;
+                    hasWeaknesses = true;
                 }
             }
             
@@ -2343,6 +2480,8 @@ ${strengthsSummary}
 ${weaknessesSummary}
 
 Scouting Report:`;
+
+            console.log("AI Prompt being sent:", prompt); // Log the prompt for debugging
 
             let chatHistory = [];
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
@@ -2387,7 +2526,7 @@ Scouting Report:`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             } else {
-                console.error(`Canvas with ID ${chartId} not found.`);
+                console.error(`Canvas with ID ${escapeJsTemplateLiteral(chartId)} not found.`); // Escaping chartId for console.error
             }
         }
 
@@ -2406,12 +2545,19 @@ Scouting Report:`;
 
             let csvContent = "Metric,Player Value,Group Average,Percentile Rank\n";
             
-            // Collect all metrics that are displayed in the table
+            // Collect all metrics that are displayed in the table (from currentAnalytics)
             const metricsToExport = [];
             for (const metric in currentAnalytics) {
                 const data = currentAnalytics[metric];
+                // Only export if player value and average are valid numbers and average is not zero
                 if (typeof data.playerValue === 'number' && !isNaN(data.playerValue) && typeof data.average === 'number' && data.average !== 0) {
-                    metricsToExport.push({ metric, ...data });
+                    // Corrected push to include all properties
+                    metricsToExport.push({ 
+                        metric: metric,
+                        playerValue: data.playerValue,
+                        average: data.average,
+                        percentile: data.percentile
+                    });
                 }
             }
             metricsToExport.sort((a,b) => a.metric.localeCompare(b.metric)); // Sort alphabetically for consistent output
@@ -2426,6 +2572,7 @@ Scouting Report:`;
                 csvContent += row + "\n";
             });
 
+            // Corrected Blob type definition
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             if (link.download !== undefined) { // Feature detection for HTML5 download attribute
@@ -2474,8 +2621,8 @@ Scouting Report:`;
 
             // Update all active charts to ensure they are rendered correctly before capture
             for (const chartId in activeCharts) {
-                if (activeCharts[chartId]) {
-                    activeCharts[chartId].update();
+                if (activeCharts[chartId] && activeCharts[chartId].instance) {
+                    activeCharts[chartId].instance.update();
                 }
             }
 
@@ -2579,15 +2726,8 @@ Scouting Report:`;
                 if (selectedPlayerName) {
                     const selectedPlayer = playerData.find(p => p.Player_Name === selectedPlayerName);
                     if (selectedPlayer) {
-                        const allRelevantMetricsForAnalytics = new Set();
-                        for (const category in DETAILED_METRIC_CATEGORIES) {
-                            DETAILED_METRIC_CATEGORIES[category].forEach(metric => {
-                                if (typeof selectedPlayer[metric] === 'number' && !isNaN(selectedPlayer[metric])) {
-                                    allRelevantMetricsForAnalytics.add(metric);
-                                }
-                            });
-                        }
-                        currentAnalytics = calculateAnalytics(selectedPlayer.Player_ID, Array.from(allRelevantMetricsForAnalytics));
+                        // Recalculate currentAnalytics with all available metrics
+                        currentAnalytics = calculateAnalytics(selectedPlayer.Player_ID, allAvailableMetrics);
                         updateMetricsTable(currentAnalytics, selectedPlayer.Player_Name);
                     }
                 }
@@ -2608,7 +2748,8 @@ Scouting Report:`;
             // Chart export buttons are now dynamically attached when charts are added
 
             // Initial UI State setup
-            document.getElementById('file-status').textContent = 'Awaiting file upload...';
+            document.getElementById('file-status').textContent = 'Please upload your data file(s) to begin.';
+
             document.getElementById('dashboard-content').classList.add('hidden');
             document.getElementById('initial-message').classList.remove('hidden');
 
